@@ -6,7 +6,7 @@ from hpp.gepetto import PathPlayer
 #get graph
 factory, graph = createConstraintGraphCustom()
 
-"""
+
 i = 0
 p = 0
 res, q, err = test_node('grasp', graph, robot)
@@ -52,7 +52,7 @@ while(i<1):
     v(q9)
     if not res: continue
 print(res, err, p)
-"""
+
 
 #Set Init
 ps.setInitialConfig(q_init)
@@ -60,7 +60,7 @@ v(q_init)
 
 #Set Goal
 q_goal = q_init[::]
-q_goal[6] = -0.1
+q_goal[17] = -0.1
 ps.addGoalConfig(q_goal) #grasp
 
 pp = PathPlayer(v)
@@ -68,4 +68,4 @@ pp = PathPlayer(v)
 pg = PathGenerator(ps, graph, ri, v, q_init)
 pg.testGraph()
 
-ps.solve()
+#ps.solve()

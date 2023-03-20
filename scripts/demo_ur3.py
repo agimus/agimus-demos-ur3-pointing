@@ -12,7 +12,7 @@ v(q_init)
 
 #Set Goal
 q_goal = q_init[::]
-q_goal[6] = -0.1
+q_goal[17] = -0.1
 ps.addGoalConfig(q_goal) #grasp
 
 pp = PathPlayer(v)
@@ -21,4 +21,4 @@ pg = PathGenerator(ps, graph, ri, v, q_init)
 pg.inStatePlanner.setEdge('Loop | f')
 pg.testGraph()
 
-ps.solve()
+#ps.solve()
