@@ -39,6 +39,7 @@ INSTALL_DEMO_LAUNCH_FILES(ur3 pointing
 
 INSTALL(FILES
   supervisor.py
+  supervisor_gripper.py
   demo-kapla.yaml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing
   )
@@ -48,12 +49,7 @@ INSTALL(FILES
   urdf/robot.urdf.xacro
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/urdf
   )
-  
-INSTALL(FILES
-  urdf/robotiq_gripper/robotiq_85_gripper.transmission.xacro
-  urdf/robotiq_gripper/robotiq_85_gripper.urdf.xacro
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/urdf/robotiq_gripper
-  )  
+   
   
 INSTALL(FILES
   srdf/kapla.srdf
@@ -68,23 +64,6 @@ INSTALL(FILES
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/meshes
   )
   
-INSTALL(FILES
-  meshes/collision/robotiq_85_base_link.stl
-  meshes/collision/robotiq_85_finger_link.stl
-  meshes/collision/robotiq_85_finger_tip_link.stl
-  meshes/collision/robotiq_85_inner_knuckle_link.stl
-  meshes/collision/robotiq_85_knuckle_link.stl
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/meshes/collision
-  )
  
-INSTALL(FILES
-  meshes/visual/robotiq_85_base_link.dae
-  meshes/visual/robotiq_85_finger_link.dae
-  meshes/visual/robotiq_85_finger_tip_link.dae
-  meshes/visual/robotiq_85_inner_knuckle_link.dae
-  meshes/visual/robotiq_85_knuckle_link.dae
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/meshes/visual
-  ) 
-
 INSTALL(DIRECTORY config DESTINATION
   ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing)

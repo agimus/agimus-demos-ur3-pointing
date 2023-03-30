@@ -2,10 +2,8 @@
     This launch file simulates UR-10 robot using Gazebo with
      - an RGBD sensor attached to the end effector,
      - the P72 part lying on a table.
-
     After launching this file, the simulated robot should be in the same state
     as the real robot when turned on.
-
 -->
 <launch>
 
@@ -60,8 +58,8 @@
   <!-- Kapla -->
   <group ns="kapla">
     <node name="spawn_part" pkg="gazebo_ros" type="spawn_model"
-	  args="-file $(find agimus_demos)/ur3/pointing/urdf/$(arg kapla).urdf
-                -urdf -model part $(arg kapla_pose)" />
+	  args="-file $(find agimus_demos)/urdf/$(arg kapla).urdf -urdf
+		-model part $(arg kapla_pose)" />
   </group>
 
 </launch>

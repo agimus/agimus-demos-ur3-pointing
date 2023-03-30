@@ -17,6 +17,7 @@ def createConstraintGraph():
     factory = ConstraintGraphFactory(graph)
     #Set gripper
     factory.setGrippers(["ur3e/GRIPPER",])
+    """
     #Gripper Constraints
     left_gripper_lock, right_gripper_lock = createGripperLockedJoints (ps, q_init)
     graph.addConstraints(
@@ -25,6 +26,7 @@ def createConstraintGraph():
         numConstraints= left_gripper_lock + right_gripper_lock,
     ),
     )
+    """
     #Set kapla
     factory.setObjects(["kapla",], [part_handles], [["ur3e/top",],])
     factory.generate()
@@ -43,7 +45,7 @@ def createConstraintGraph():
 def createConstraintGraphCustom():
     graph = ConstraintGraph(robot, 'graph2')
     factory = ConstraintGraphFactory(graph)
-    
+    """
     #Gripper Constraints
     left_gripper_lock, right_gripper_lock = createGripperLockedJoints (ps, q_init)
     graph.addConstraints(
@@ -52,7 +54,7 @@ def createConstraintGraphCustom():
         numConstraints= left_gripper_lock + right_gripper_lock,
     ),
     )
-
+    """
     #Constraints
     qw, qx, qy, qz = EulerToQuaternion(pi,pi/2,0)
         
@@ -80,7 +82,7 @@ def createConstraintGraphCustom():
     
     ps.createTransformationConstraint(
             'pre-grasp', 
-            'ur3e/robotiq_85_base_link',
+            'ur3e/robotiq_85_gripper',
             'kapla/root_joint',
             [0.20, 0, 0,qx, qy, qz, qw],
             [True, True, True, True, True, True,],)
