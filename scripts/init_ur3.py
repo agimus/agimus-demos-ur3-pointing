@@ -112,7 +112,7 @@ robot.client.manipulation.robot.insertRobotSRDFModel\
 
 #Pose Kapla
 qw, qx, qy, qz = EulerToQuaternion(0,0,0)
-partPose = [0.1, -0.4, 1.009,qx,qy,qz, qw]
+partPose = [0.1, -0.4, 1.109,qx,qy,qz, qw]
 
 ## Define initial configuration
 q0 = robot.getCurrentConfig()

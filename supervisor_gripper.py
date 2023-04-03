@@ -100,24 +100,8 @@ def makeSupervisorWithFactory(robot):
     from hpp.corbaserver.manipulation import Rule
     factory.setupFrames(srdf["grippers"], srdf["handles"], robot)
     for k in handlesPerObjects[0]:
-        factory.handleFrames[k].hasVisualTag = True
-    factory.generate()
-
-    supervisor.makeInitialSot()
-    return factory, supervisor
-
-
-# Use service /agimus/sot/set_base_pose to set initial config
-factory, supervisor = makeSupervisorWithFactory(robot)
-
-supervisor.plugTopicsToRos()
-supervisor.plugSot("")
-
-
-"""
-    #####################    
-    ### Modifications ###
-    #####################
+        factory.handleFrames[k].hasVisualTag = False
+    
     def makeLoopTransitionBIS (factory, state,edge):
         sot = factory._newSoT ('sot_'+edge)
         from agimus_sot.events import logical_and_entity
@@ -135,32 +119,26 @@ supervisor.plugSot("")
     print(grasps)
     state = factory.makeState(grasps, 1)
     makeLoopTransitionBIS(factory, state, 'transit')    
-    grasps = (None,) * len(factory.grippers)
-    print(grasps)
-    state = factory.makeState(grasps, 1)
-    makeLoopTransitionBIS(factory, state, 'approach_kapla')
 
     state = factory.makeState(grasps, 1)
     makeLoopTransitionBIS(factory, state, 'grasp_kapla')
-
-    state = factory.makeState(grasps, 1)
-    makeLoopTransitionBIS(factory, state, 'take_kapla_up')
-    
-    state = factory.makeState(grasps, 1)
-    makeLoopTransitionBIS(factory, state, 'take_kapla_away')
     
     state = factory.makeState(grasps, 1)
     makeLoopTransitionBIS(factory, state, 'transfer')
     
     state = factory.makeState(grasps, 1)
-    makeLoopTransitionBIS(factory, state, 'approach_ground')
-    
-    state = factory.makeState(grasps, 1)
-    makeLoopTransitionBIS(factory, state, 'put_kapla_down')
+    makeLoopTransitionBIS(factory, state, 'release_kapla')
 
-    state = factory.makeState(grasps, 1)
-    makeLoopTransitionBIS(factory, state, 'move_gripper_up')
+    factory.generate()
 
-    state = factory.makeState(grasps, 1)
-    makeLoopTransitionBIS(factory, state, 'move_gripper_away')
-"""
+    supervisor.makeInitialSot()
+    return factory, supervisor
+
+
+# Use service /agimus/sot/set_base_pose to set initial config
+factory, supervisor = makeSupervisorWithFactory(robot)
+
+supervisor.plugTopicsToRos()
+supervisor.plugSot("")
+
+ 

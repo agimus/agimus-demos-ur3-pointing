@@ -57,7 +57,8 @@ def createConstraintGraphCustom():
     """
     #Constraints
     qw, qx, qy, qz = EulerToQuaternion(pi,pi/2,0)
-        
+    qx, qy, qz, qw = -0.5, -0.5, 0.5, -0.5
+    print(qx, qy, qz, qw)
     ps.createTransformationConstraint(
             'grasp', 
             'ur3e/GRIPPER',
@@ -70,35 +71,35 @@ def createConstraintGraphCustom():
             'placement', 
             '',
             'kapla/root_joint',
-            [0, 0, 1.009, 0,0,0,1],
+            [0, 0, 1.109, 0,0,0,1],
             [False, False, True, True, True, False,],)
     
     ps.createTransformationConstraint(
             'placement/complement', 
             '',
             'kapla/root_joint',
-            [0, 0, 1.009, 0,0,0,1],
+            [0, 0, 1.109, 0,0,0,1],
             [True, True, False, False, False, True],)
     
     ps.createTransformationConstraint(
             'pre-grasp', 
             'ur3e/robotiq_85_gripper',
             'kapla/root_joint',
-            [0.20, 0, 0,qx, qy, qz, qw],
+            [0, 0.20,0.075,qx, qy, qz, qw],
             [True, True, True, True, True, True,],)
      
     ps.createTransformationConstraint(
             'pre-release', 
             '',
             'kapla/root_joint',
-            [0, 0, 1.109, 0,0,0,1],
+            [0, 0, 1.209, 0,0,0,1],
             [False, False, True, True, True, True,],)
     
     ps.createTransformationConstraint(
             'pre-grasp/complement', 
             '',
             'ur3e/wrist_3_joint',
-            [0, 0, 1.109, 0,0,0,1],
+            [0, 0, 1.209, 0,0,0,1],
             [True, True, False, False, False, False,],)
     
 
@@ -143,6 +144,102 @@ def createConstraintGraphCustom():
     graph.addConstraints(edge='put_kapla_down', constraints = Constraints(numConstraints=['grasp', 'placement/complement']))
     graph.addConstraints(edge='move_gripper_up', constraints = Constraints(numConstraints=['placement/complement']))
     graph.addConstraints(edge='move_gripper_away', constraints = Constraints(numConstraints=[ 'placement/complement']))
+    
+
+    graph.initialize()
+    
+    # Set weights of levelset edges to 0
+    for e in graph.edges.keys():
+        if e[-3:] == "_ls" and graph.getWeight(e) != -1:
+            graph.setWeight(e, 0)
+    return factory, graph
+    
+################################################
+### Custom Constraint Graph to grasp a kapla ###
+################################################    
+def createConstraintGraphCustomBIS():
+    graph = ConstraintGraph(robot, 'graph2')
+    factory = ConstraintGraphFactory(graph)
+    """
+    #Gripper Constraints
+    left_gripper_lock, right_gripper_lock = createGripperLockedJoints (ps, q_init)
+    graph.addConstraints(
+    graph=True,
+    constraints=Constraints(
+        numConstraints= left_gripper_lock + right_gripper_lock,
+    ),
+    )
+    """
+    #Constraints
+    qw, qx, qy, qz = EulerToQuaternion(pi,pi/2,0)
+    qx, qy, qz, qw = -0.5, -0.5, 0.5, -0.5
+    print(qx, qy, qz, qw)
+    ps.createTransformationConstraint(
+            'grasp', 
+            'ur3e/GRIPPER',
+            'kapla/root_joint',
+            [0, 0, 0, 0, 0, 0, 1],
+            [True, True, True, True, True, True,],)
+    
+    #Kapla in horizontal plane with free rotation z
+    ps.createTransformationConstraint(
+            'placement', 
+            '',
+            'kapla/root_joint',
+            [0, 0, 1.109, 0,0,0,1],
+            [False, False, True, True, True, False,],)
+    
+    ps.createTransformationConstraint(
+            'placement/complement', 
+            '',
+            'kapla/root_joint',
+            [0, 0, 1.109, 0,0,0,1],
+            [True, True, False, False, False, True],)
+    
+    ps.createTransformationConstraint(
+            'pre-grasp', 
+            'ur3e/robotiq_85_gripper',
+            'kapla/root_joint',
+            [0, 0.20,0.075,qx, qy, qz, qw],
+            [True, True, True, True, True, True,],)
+     
+    ps.createTransformationConstraint(
+            'pre-release', 
+            '',
+            'kapla/root_joint',
+            [0, 0, 1.209, 0,0,0,1],
+            [False, False, True, True, True, True,],)
+    
+    ps.createTransformationConstraint(
+            'pre-grasp/complement', 
+            '',
+            'ur3e/wrist_3_joint',
+            [0, 0, 1.209, 0,0,0,1],
+            [True, True, False, False, False, False,],)
+    
+
+    ps.setConstantRightHandSide("placement", True)
+    ps.setConstantRightHandSide("pre-grasp", True)
+    ps.setConstantRightHandSide("placement/complement", False)
+    ps.setConstantRightHandSide("pre-grasp/complement", False)
+    
+    #Nodeskapla/root_joint
+    graph.createNode(['grasp','placement'])
+
+    #Edge
+    graph.createEdge('placement', 'placement', 'transit', 1, 'placement')
+    graph.createEdge('placement', 'grasp', 'grasp_kapla', 1, 'placement')
+    graph.createEdge('grasp', 'grasp', 'transfer', 1, 'grasp')
+    graph.createEdge('grasp', 'placement', 'release_kapla', 1, 'grasp')
+
+    #Apply constraints
+    graph.addConstraints(node='placement',constraints = Constraints(numConstraints=['placement']))
+    graph.addConstraints(node='grasp',constraints = Constraints(numConstraints=['grasp']))
+    
+    graph.addConstraints(edge='transit', constraints = Constraints(numConstraints=['placement/complement']))
+    graph.addConstraints(edge='grasp_kapla', constraints = Constraints(numConstraints=['placement/complement']))
+    graph.addConstraints(edge='transfer', constraints = Constraints(numConstraints=['grasp']))
+    graph.addConstraints(edge='release_kapla', constraints = Constraints(numConstraints=[ 'grasp']))
     
 
     graph.initialize()
