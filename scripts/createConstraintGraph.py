@@ -17,16 +17,6 @@ def createConstraintGraph():
     factory = ConstraintGraphFactory(graph)
     #Set gripper
     factory.setGrippers(["ur3e/GRIPPER",])
-    """
-    #Gripper Constraints
-    left_gripper_lock, right_gripper_lock = createGripperLockedJoints (ps, q_init)
-    graph.addConstraints(
-    graph=True,
-    constraints=Constraints(
-        numConstraints= left_gripper_lock + right_gripper_lock,
-    ),
-    )
-    """
     #Set kapla
     factory.setObjects(["kapla",], [part_handles], [["ur3e/top",],])
     factory.generate()
@@ -45,16 +35,7 @@ def createConstraintGraph():
 def createConstraintGraphCustom():
     graph = ConstraintGraph(robot, 'graph2')
     factory = ConstraintGraphFactory(graph)
-    """
-    #Gripper Constraints
-    left_gripper_lock, right_gripper_lock = createGripperLockedJoints (ps, q_init)
-    graph.addConstraints(
-    graph=True,
-    constraints=Constraints(
-        numConstraints= left_gripper_lock + right_gripper_lock,
-    ),
-    )
-    """
+
     #Constraints
     qw, qx, qy, qz = EulerToQuaternion(pi,pi/2,0)
     qx, qy, qz, qw = -0.5, -0.5, 0.5, -0.5
@@ -71,14 +52,14 @@ def createConstraintGraphCustom():
             'placement', 
             '',
             'kapla/root_joint',
-            [0, 0, 1.109, 0,0,0,1],
+            [0, 0, 1.009, 0,0,0,1],
             [False, False, True, True, True, False,],)
     
     ps.createTransformationConstraint(
             'placement/complement', 
             '',
             'kapla/root_joint',
-            [0, 0, 1.109, 0,0,0,1],
+            [0, 0, 1.009, 0,0,0,1],
             [True, True, False, False, False, True],)
     
     ps.createTransformationConstraint(
@@ -92,14 +73,14 @@ def createConstraintGraphCustom():
             'pre-release', 
             '',
             'kapla/root_joint',
-            [0, 0, 1.209, 0,0,0,1],
+            [0, 0, 1.109, 0,0,0,1],
             [False, False, True, True, True, True,],)
     
     ps.createTransformationConstraint(
             'pre-grasp/complement', 
             '',
             'ur3e/wrist_3_joint',
-            [0, 0, 1.209, 0,0,0,1],
+            [0, 0, 1.109, 0,0,0,1],
             [True, True, False, False, False, False,],)
     
 
@@ -154,151 +135,6 @@ def createConstraintGraphCustom():
             graph.setWeight(e, 0)
     return factory, graph
     
-################################################
-### Custom Constraint Graph to grasp a kapla ###
-################################################    
-def createConstraintGraphCustomBIS():
-    graph = ConstraintGraph(robot, 'graph2')
-    factory = ConstraintGraphFactory(graph)
-    """
-    #Gripper Constraints
-    left_gripper_lock, right_gripper_lock = createGripperLockedJoints (ps, q_init)
-    graph.addConstraints(
-    graph=True,
-    constraints=Constraints(
-        numConstraints= left_gripper_lock + right_gripper_lock,
-    ),
-    )
-    """
-    #Constraints
-    qw, qx, qy, qz = EulerToQuaternion(pi,pi/2,0)
-    qx, qy, qz, qw = -0.5, -0.5, 0.5, -0.5
-    print(qx, qy, qz, qw)
-    ps.createTransformationConstraint(
-            'grasp', 
-            'ur3e/GRIPPER',
-            'kapla/root_joint',
-            [0, 0, 0, 0, 0, 0, 1],
-            [True, True, True, True, True, True,],)
-    
-    #Kapla in horizontal plane with free rotation z
-    ps.createTransformationConstraint(
-            'placement', 
-            '',
-            'kapla/root_joint',
-            [0, 0, 1.109, 0,0,0,1],
-            [False, False, True, True, True, False,],)
-    
-    ps.createTransformationConstraint(
-            'placement/complement', 
-            '',
-            'kapla/root_joint',
-            [0, 0, 1.109, 0,0,0,1],
-            [True, True, False, False, False, True],)
-    
-    ps.createTransformationConstraint(
-            'pre-grasp', 
-            'ur3e/robotiq_85_gripper',
-            'kapla/root_joint',
-            [0, 0.20,0.075,qx, qy, qz, qw],
-            [True, True, True, True, True, True,],)
-     
-    ps.createTransformationConstraint(
-            'pre-release', 
-            '',
-            'kapla/root_joint',
-            [0, 0, 1.209, 0,0,0,1],
-            [False, False, True, True, True, True,],)
-    
-    ps.createTransformationConstraint(
-            'pre-grasp/complement', 
-            '',
-            'ur3e/wrist_3_joint',
-            [0, 0, 1.209, 0,0,0,1],
-            [True, True, False, False, False, False,],)
-    
-
-    ps.setConstantRightHandSide("placement", True)
-    ps.setConstantRightHandSide("pre-grasp", True)
-    ps.setConstantRightHandSide("placement/complement", False)
-    ps.setConstantRightHandSide("pre-grasp/complement", False)
-    
-    #Nodeskapla/root_joint
-    graph.createNode(['grasp','placement'])
-
-    #Edge
-    graph.createEdge('placement', 'placement', 'transit', 1, 'placement')
-    graph.createEdge('placement', 'grasp', 'grasp_kapla', 1, 'placement')
-    graph.createEdge('grasp', 'grasp', 'transfer', 1, 'grasp')
-    graph.createEdge('grasp', 'placement', 'release_kapla', 1, 'grasp')
-
-    #Apply constraints
-    graph.addConstraints(node='placement',constraints = Constraints(numConstraints=['placement']))
-    graph.addConstraints(node='grasp',constraints = Constraints(numConstraints=['grasp']))
-    
-    graph.addConstraints(edge='transit', constraints = Constraints(numConstraints=['placement/complement']))
-    graph.addConstraints(edge='grasp_kapla', constraints = Constraints(numConstraints=['placement/complement']))
-    graph.addConstraints(edge='transfer', constraints = Constraints(numConstraints=['grasp']))
-    graph.addConstraints(edge='release_kapla', constraints = Constraints(numConstraints=[ 'grasp']))
-    
-
-    graph.initialize()
-    
-    # Set weights of levelset edges to 0
-    for e in graph.edges.keys():
-        if e[-3:] == "_ls" and graph.getWeight(e) != -1:
-            graph.setWeight(e, 0)
-    return factory, graph
-    
-
-def createConstraintGraphPointing():
-    # Return a list of available elements of type type handle
-    all_handles = ps.getAvailable('handle')
-    part_handles = list(filter(lambda x: x.startswith("part/"), all_handles))
-
-    graph = ConstraintGraph(robot, 'graph2')
-    factory = ConstraintGraphFactory(graph)
-    factory.setGrippers(["ur3e/gripper",])
-    factory.setObjects(["part",], [part_handles], [[]])
-    factory.generate()
-    for handle in all_handles:
-        loopEdge = 'Loop | 0-{}'.format(factory.handles.index(handle))
-        graph.addConstraints(edge = loopEdge, constraints = Constraints
-            (numConstraints=['part/root_joint']))
-
-    n = norm([-0.576, -0.002, 0.025, 0.817])
-    ps.createTransformationConstraint('look-at-part', 'part/base_link', 'ur3e/wrist_3_link',
-                                    [-0.126, -0.611, 1.209, -0.576/n, -0.002/n, 0.025/n, 0.817/n],
-                                    [True, True, True, True, True, True,])
-    graph.createNode(['look-at-part'])
-    graph.createEdge('free', 'look-at-part', 'go-look-at-part', 1, 'free')
-    graph.createEdge('look-at-part', 'free', 'stop-looking-at-part', 1, 'free')
-
-    graph.addConstraints(node='look-at-part',
-                        constraints = Constraints(numConstraints=['look-at-part']))
-    ps.createTransformationConstraint('placement/complement', '','part/base_link',
-                                    [0,0,0,0, 0, 0, 1],
-                                    [True, True, True, True, True, True,])
-    ps.setConstantRightHandSide('placement/complement', False)
-    graph.addConstraints(edge='go-look-at-part',
-                        constraints = Constraints(numConstraints=\
-                                                ['placement/complement']))
-    graph.addConstraints(edge='stop-looking-at-part',
-                        constraints = Constraints(numConstraints=\
-                                                ['placement/complement']))
-  #  sm = SecurityMargins(ps, factory, ["ur3e", "part"])
- #   sm.setSecurityMarginBetween("ur3e", "part", 0.015)
- #   sm.setSecurityMarginBetween("ur3e", "ur3e", 0)
- #   sm.defaultMargin = 0.01
- #   sm.apply()
-    graph.initialize()
-    # Set weights of levelset edges to 0
-    for e in graph.edges.keys():
-        if e[-3:] == "_ls" and graph.getWeight(e) != -1:
-            graph.setWeight(e, 0)
-    return factory, graph
-
-
 # Create locked joint for grippers
 def createGripperLockedJoints (ps, q):
     left_gripper_lock = list()

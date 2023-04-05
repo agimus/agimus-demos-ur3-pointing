@@ -43,7 +43,12 @@ INSTALL(FILES
   demo-kapla.yaml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing
   )
-
+  
+INSTALL(PROGRAMS
+    gripper_control.py
+    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing
+    )  
+  
 INSTALL(FILES
   urdf/kapla.urdf
   urdf/robot.urdf.xacro

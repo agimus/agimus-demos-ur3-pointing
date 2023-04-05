@@ -193,6 +193,8 @@
       <origin xyz="0.0 0.0 1" rpy="0.0 0.0 -1.5707963" />
    </joint>
    
+   <!-- Gripper -->
+   
     <link name="robotiq_85_gripper">
       <visual>
         <geometry>
@@ -207,7 +209,6 @@
         </geometry>
       </collision>
     </link>
-
 
     <link name="robotiq_coupler">
     <visual>
@@ -249,6 +250,8 @@
       <child link="tcp"/>
     </joint>
     <link name="tcp"/>
+    
+    
     
    <link name="ref_camera_link">
    </link>

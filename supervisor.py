@@ -34,23 +34,14 @@ from agimus_sot.action import Action
 from dynamic_graph.ros.ros_publish import RosPublish
 
 Action.maxControlSqrNorm = 20
-
-# Action to be performed at start of pre-action of transition
-# "ur3e/gripper > part/handle_{} | f_12"
-class ObjectLocalization(object):
+class CloseGripper(object):
     timeout = 5
-    def __init__(self, sotrobot, factory, gripper, handle):
+    def __init__(self, sotrobot):
         self.sotrobot = sotrobot
-        self.objectLocalization = factory.tasks.getGrasp(gripper, handle)\
-                                  ['pregrasp'].objectLocalization
-        # JESSY 05/12 setVisualServoingMode to False.
-        self.objectLocalization.setVisualServoingMode(False)
-
-        self.handle = handle
-        self.localizationFailedTopic = "/agimus/status/localization_failed"
-        self.localizationFailedPublisher = RosPublish("localizationFailedPublisher")
-        self.localizationFailedPublisher.add('string', 'localizationFailedPublisher-'+handle, self.localizationFailedTopic)
-        self.localizationFailedPublisher.signal('localizationFailedPublisher-'+handle).value = ""
+        self.gripperCloseTopic = "/agimus/sot/gripper_status"
+        self.gripperClosePublisher = RosPublish("GripperClose")
+        self.gripperClosePublisher.add('boolean', 'gripperClosePublisher_', self.gripperCloseTopic)
+        self.gripperClosePublisher.signal('gripperClosePublisher_').value = True
 
     def __call__(self):
         ts = self.sotrobot.device.getTimeStep()
@@ -59,14 +50,48 @@ class ObjectLocalization(object):
         while True:
             t = self.sotrobot.device.control.time
             if t > start_it + to:
-                print("Failed to perform object localization")
-                self.localizationFailedPublisher.signal('trigger').recompute(t)
-                return False, "Failed to perform object localization"
-            self.objectLocalization.trigger(t)
-            if self.objectLocalization.done.value:
-                print("Successfully performed object localization")
-                return True, ""
-            time.sleep(ts)
+                print("Failed to grasp")
+                return False, "Failed to grasp"
+            else:
+                self.gripperClosePublisher.signal('trigger').recompute(t)
+                time.sleep(ts)
+                time.sleep(1.)
+                return True, ""    
+class OpenGripper(object):
+    timeout = 5
+    def __init__(self, sotrobot):
+        self.sotrobot = sotrobot
+        self.gripperOpenTopic = "/agimus/sot/gripper_status"
+        self.gripperOpenPublisher = RosPublish("GripperOpen")
+        self.gripperOpenPublisher.add('boolean', 'gripperOpenPublisher_', self.gripperOpenTopic)
+        self.gripperOpenPublisher.signal('gripperOpenPublisher_').value = False
+
+    def __call__(self):
+        ts = self.sotrobot.device.getTimeStep()
+        to = int(self.timeout / self.sotrobot.device.getTimeStep())
+        start_it = self.sotrobot.device.control.time
+        while True:
+            t = self.sotrobot.device.control.time
+            if t > start_it + to:
+                print("Failed to grasp")
+                return False, "Failed to grasp"
+            else:
+                self.gripperOpenPublisher.signal('trigger').recompute(t)
+                time.sleep(ts)
+                time.sleep(1.)
+                return True, ""        
+def makeLoopTransitionBIS (factory, state,edge):
+    sot = factory._newSoT ('sot_'+edge)
+    from agimus_sot.events import logical_and_entity
+    sot. doneSignal = logical_and_entity("ade_sot_"+edge,
+    [   factory.supervisor.done_events.timeEllapsedSignal,
+    factory.supervisor.done_events.controlNormSignal])
+    
+    factory.hpTasks.pushTo(sot)
+    state.manifold.pushTo(sot)
+    factory.lpTasks.pushTo(sot)
+    
+    factory.actions[edge] = sot                
 
 def wait():
     print("Waiting 1 second")
@@ -119,46 +144,47 @@ def makeSupervisorWithFactory(robot):
 
     supervisor = Supervisor(robot, prefix=list(robotDict.keys())[0])
     factory = Factory(supervisor)
-    factory.tasks = TaskFactory(factory)
     factory.parameters["period"] = 0.01  # TODO soon: robot.getTimeStep()
     factory.parameters["simulateTorqueFeedback"] = simulateTorqueFeedbackForEndEffector
     factory.parameters["addTracerToAdmittanceController"] = False
-    # factory.parameters["addTimerToSotControl"] = True
-    factory.setGrippers(grippers)
-    factory.setObjects(objects, handlesPerObjects, contactPerObjects)
 
     from hpp.corbaserver.manipulation import Rule
     factory.setupFrames(srdf["grippers"], srdf["handles"], robot)
-    for k in handlesPerObjects[0]:
-        factory.handleFrames[k].hasVisualTag = True
+    
+    grasps = (None,) * len(factory.grippers)
+
+    state = factory.makeState(grasps, 1)
+    makeLoopTransitionBIS(factory, state, 'Loop | f')    
+
+    state = factory.makeState(grasps, 1)
+    makeLoopTransitionBIS(factory, state, 'Loop | 0-0')
+    
+    state = factory.makeState(grasps, 1)
+    makeLoopTransitionBIS(factory, state, 'ur3e/GRIPPER > kapla/handle | f_01')
+    
+    state = factory.makeState(grasps, 1)
+    makeLoopTransitionBIS(factory, state, 'ur3e/GRIPPER > kapla/handle | f_12')
+    
+    state = factory.makeState(grasps, 1)
+    makeLoopTransitionBIS(factory, state, 'ur3e/GRIPPER < kapla/handle | 0-0_10')
+    
+    state = factory.makeState(grasps, 1)
+    makeLoopTransitionBIS(factory, state, 'ur3e/GRIPPER < kapla/handle | 0-0_21')
+    
+    state = factory.makeState(grasps, 1)
+    makeLoopTransitionBIS(factory, state, 'ur3e/GRIPPER < kapla/handle | 0-0')
+    
     factory.generate()
-
+    
+    #post Action
+    closeGripper = CloseGripper(robot)
+    supervisor.actions['Loop | 0-0'].preActions.append(closeGripper)
+    
+    openGripper = OpenGripper(robot)
+    supervisor.actions['ur3e/GRIPPER < kapla/handle | 0-0_21'].preActions.append(openGripper)
+    
     supervisor.makeInitialSot()
-    g = factory.grippers[0]
-    for h in factory.handles:
-        transitionName_12 = '{} > {} | f_12'.format(g, h)
-        goalName = '{} grasps {}'.format(g, h)
-        # Add visual servoing in post actions of transtion 'g > h | f_12'
-        # visual servoing is deactivated by default at this step to avoid
-        # undesirable effects when grasping an object.
-        supervisor.postActions[transitionName_12][goalName].sot = \
-          supervisor.actions[transitionName_12].sot
-        # Add a pre-action to the pre-action of transition 'g > h | f_12'
-        # in order to perform object localization before starting the
-        # motion.
-        ol = ObjectLocalization(robot, factory, g, h)
-        supervisor.preActions[transitionName_12].preActions.append(ol)
-        # For calibration handles, relocalize in contact
-
-        # VISUAL Commented for visual servoing
-        #if h.find('calibration') != -1:
-        #   supervisor.postActions[transitionName_12][goalName].preActions.\
-        #        append(ol)
-
-        id = factory.handles.index(h)
-        transitionName_21 = '{} < {} | 0-{}_21'.format(g, h, id)
-        supervisor.preActions[transitionName_21].preActions.append(wait)
-    localizeObjectOnLoopTransition(supervisor, factory.handles)
+    
     return factory, supervisor
 
 
@@ -167,3 +193,4 @@ factory, supervisor = makeSupervisorWithFactory(robot)
 
 supervisor.plugTopicsToRos()
 supervisor.plugSot("")
+

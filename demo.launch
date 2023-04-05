@@ -1,4 +1,6 @@
 <launch>
+  <node name="robotiq2FGripper" pkg="robotiq_2f_gripper_control" type="Robotiq2FGripperRtuNode.py" args="/dev/ttyUSB0" respawn="true" output="screen"/>
+  
   <arg name="script_file"
        doc="Full path to the script which initialize the supervisor"
        default="$(find agimus_demos)/ur3/pointing/supervisor.py" />
@@ -40,4 +42,9 @@
   </include>
 
   <include if="$(arg estimation)" file="$(find agimus_demos)/launch/ur3_pointing_estimation.launch"/>
+    
+
+  <node name="gripper_control" pkg="agimus_demos" type="gripper_control.py" respawn="true" />
+
+  
 </launch>
