@@ -1,4 +1,5 @@
-# Copyright 2022 CNRS
+#!/usr/bin/env python
+# Copyright 2021 CNRS - Airbus SAS
 # Author: Florent Lamiraux
 #
 # Redistribution and use in source and binary forms, with or without
@@ -24,55 +25,21 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# Install launch files in launch directory
-INSTALL_DEMO_LAUNCH_FILES(ur3 pointing
-  LAUNCHFILES
-  demo.launch
-  demo_calib.launch
-  estimation.launch
-  estimation_realsense.launch
-  load_ur.launch
-  load_ur3e.launch
-  simulation.launch
-  ur3_upload.launch
-  world_setup.launch
-  )
+from agimus_demos.calibration.play_path import CalibrationControl
 
-INSTALL(FILES
-  supervisor.py
-  supervisor_gripper.py
-  demo-kapla.yaml
-  demo-april-tag-plank.yaml
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing
-  )
-  
-INSTALL(PROGRAMS
-    gripper_control.py
-    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing
-    )  
-  
-INSTALL(FILES
-  urdf/kapla.urdf
-  urdf/april-tag-plank.urdf
-  urdf/robot.urdf.xacro
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/urdf
-  )
-   
-  
-INSTALL(FILES
-  srdf/kapla.srdf
-  srdf/april-tag-plank.srdf
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/srdf
-  )
+def playAllPaths (startIndex):
+    i = startIndex
+    while i < nbPaths:
+        cc.playPath (i)
+        if not cc.errorOccured:
+            print("Ran {}".format(i))
+            i+=1
+        #rospy.sleep (1)
 
-INSTALL(FILES
-  meshes/IMC.stl
-  meshes/gripper_2f85_opened.stl
-  meshes/robotiq_85_coupler.stl
-  meshes/ur3_d435_mount.stl
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/meshes
-  )
-  
- 
-INSTALL(DIRECTORY config DESTINATION
-  ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing)
+if __name__ == '__main__':
+    cc = CalibrationControl ()
+    cc.timeout = 3
+    nbPaths = cc.hppClient.problem.numberPaths ()
+    
+    
+    #playAllPaths (0)

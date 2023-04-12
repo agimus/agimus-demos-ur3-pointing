@@ -96,22 +96,7 @@
     </link>
 
      <link name="walls">
-      
-     <!-- front wall -->
-     <!-- visual -->
-	<!-- origin xyz="0.385 -0.305 0.37"/ -->
-        <!-- geometry -->
-	  <!-- box size="0.03 1 0.74"/ -->
-        <!-- /geometry -->
-	<!-- material name="white02"/ -->
-     <!-- /visual -->
-      <collision>
-       <origin xyz="0.385 -0.305 0.37"/>
-       <geometry>
-	 <box size="0.03 1 0.74"/>
-       </geometry>
-      </collision>
-      
+            
       <!-- behind wall -->
      <visual>
 	<origin xyz="-0.385 -0.305 0.37"/>
@@ -192,22 +177,23 @@
      <child link = "base_link" />
       <origin xyz="0.0 0.0 1" rpy="0.0 0.0 -1.5707963" />
    </joint>
-   
+    
+       
    <!-- Gripper -->
    
     <link name="robotiq_85_gripper">
-      <visual>
+     <!-- <visual>
         <geometry>
-          <!-- The path to the visual meshes in the package. -->
+         The path to the visual meshes in the package. 
           <mesh filename="package://agimus_demos/ur3/pointing/meshes/gripper_2f85_opened.stl" scale = "0.001 0.001 0.001" />
         </geometry>
-      </visual>
-      <collision>
+      </visual> -->
+      <!-- collision>
         <geometry>
-          <!-- The path to the collision meshes in the package. -->
+          < The path to the collision meshes in the package. >
           <mesh filename="package://agimus_demos/ur3/pointing/meshes/gripper_2f85_opened.stl" scale = "0.001 0.001 0.001" />
-        </geometry>
-      </collision>
+        </geometry> 
+      </collision> -->
     </link>
 
     <link name="robotiq_coupler">
@@ -231,7 +217,7 @@
   </link>
   
   <joint name="robotiq_coupler_joint" type="fixed">
-    <origin xyz="0 0 0.004" rpy="0 0 ${-pi/2.0}" />
+    <origin xyz="0 0 0.01" rpy="0 0 ${-pi/2.0}" />
     <parent link="tool0"/>
     <child link="robotiq_coupler"/>
   </joint>
@@ -243,6 +229,7 @@
     <origin xyz="-0.09 0 0" rpy="${pi/2} 0 ${pi/2}"/>
   </joint> 
    
+
     <!-- TCP frame -->
     <joint name="tcp_joint" type="fixed">
       <origin xyz="0 0 0.116" rpy="0 0 0"/>
@@ -250,14 +237,46 @@
       <child link="tcp"/>
     </joint>
     <link name="tcp"/>
+
     
+    <!-- Camera -->
     
-    
+    <link name="ur3_d435_mount_link">
+     <inertial>
+       <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+       <mass value="0.1"/>
+       <inertia ixx="0.001" ixy="0.0" ixz="0.0"
+         iyy="0.001" iyz="0.0"
+         izz="0.001" />
+     </inertial>
+     <visual>
+       <origin xyz="0 0 0" rpy="0 0 0" />
+       <geometry>
+         <mesh filename="package://agimus_demos/ur3/pointing/meshes/ur3_d435_mount.stl"/>
+       </geometry>
+       <material name="Red">
+         <color rgba="0.9 0.1 0.1 1.0"/>
+       </material>
+     </visual>
+     <collision>
+       <origin xyz="0 0 0" rpy="0 0 0" />
+       <geometry>
+         <mesh filename="package://agimus_demos/ur3/pointing/meshes/ur3_d435_mount.stl"/>
+       </geometry>
+     </collision>
+   </link>
+
+   <joint name="ur3_d435_mount_joint" type="fixed">
+     <parent link="wrist_3_link"/>
+     <child link="ur3_d435_mount_link" />
+     <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 3.14159265359" />
+   </joint>
+
    <link name="ref_camera_link">
    </link>
 
     <joint name="ref_camera_joint" type="fixed">
-     <parent link="wrist_3_link" />
+     <parent link="ur3_d435_mount_link" />
      <child link = "ref_camera_link" />
      <origin xyz="${camera_pose['camera']['x']}
                   ${camera_pose['camera']['y']}

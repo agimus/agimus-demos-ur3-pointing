@@ -45,9 +45,11 @@ kinematics:
 
 # Pose of ref_camera_link in ur10e_d435_mount_link
 camera:
-  x: 0.00033351
-  y: 0.11805402
-  z: -0.01064025
-  roll: -0.00127120646
-  pitch: -1.00435876
-  yaw: -1.56137241
+  x: 0.00300477
+  y:  0.12627253
+  z: -0.02307305
+  roll: 0.00817553
+  pitch: -1.07047557
+  yaw: -1.56309642
+  
+
