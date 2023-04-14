@@ -43,7 +43,7 @@ Wires clamps: https://www.thingiverse.com/thing:3832407
 ## III- Steps to run the demo
 
 Open several tabs in a terminal, go to directory
-`/root/catkin_ws/src/agimus-demos/ur3/pointing` and type the following
+`/root/catkin_ws/src/agimus-demos/ur3/pointing/launch` and type the following
 instructions
 
 0. Follow the instructions in `README-localization.md` to launch the camera node and the localizer node.
@@ -59,7 +59,7 @@ roslaunch ./simulation.launch
 
 On the robot instead:
 ```bash
-roslaunch ur_robot_driver ur3e_bringup.launch robot_ip:=192.168.56.5 robot_description_file:=$DEVEL_HPP_DIR/install/share/agimus_demos/launch/ur3_pointing_load_ur3e.launch
+roslaunch ur_robot_driver ur3_bringup.launch robot_ip:=192.168.56.3 robot_description_file:=$DEVEL_HPP_DIR/install/share/agimus_demos/launch/ur3_pointing_load_ur3e.launch
 ```
 
 If this fails, with the error message `Could not get fresh data package from robot`, turn off and on the robot by clicking on the green button in the lower left of the tablet, then on `OFF`, then `ON` then `START` and try to run the robot bringup again.
@@ -71,9 +71,9 @@ read
 [ INFO] [1634638700.530389390]: Robot connected to reverse interface. Ready to receive control commands.
 ```
 
-2. After press "play", open new terminal (terminal 2) at `/agimus-demos/ur3/pointing` and run:
+2. After press "play", open new terminal (terminal 2) at `/agimus-demos/ur3/pointing/launch` and run:
 ```bash
-python stop-controllers.py
+python ../stop-controllers.py
 ```
 
 3. in terminal 2:
@@ -82,7 +82,7 @@ roslaunch ./demo.launch simulation:=true
 ```
 or on the real robot:
 ```bash
-roslaunch ./demo.launch
+roslaunch ./demo_vision.launch
 ```
 On the robot, after the file is run, the robot should have a lock sound of the joint.
 
@@ -100,7 +100,7 @@ gepetto-gui
 
 6. In terminal 5
 ```bash
-python -i script_hpp.py
+python -i demo_vision.py
 ```
 7. Move the sensor in front of the part, in python terminal:
 ```
