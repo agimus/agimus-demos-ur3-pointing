@@ -1,0 +1,39 @@
+<robot name="ur3e">
+  <gripper name="gripper" clearance="0.08">
+    <position xyz="0 0 0.18" rpy="-1.57079 0 -1.57079"/>
+    <link name="ur3_d435_mount_link"/>
+  </gripper>
+
+  <disable_collisions link1="shoulder_link"
+     link2="upper_arm_link" reason=""/>
+  <disable_collisions link1="upper_arm_link"
+		      link2="forearm_link" reason=""/>
+
+  <disable_collisions link1="wrist_1_link"
+		      link2="wrist_2_link" reason=""/>
+  <disable_collisions link1="wrist_2_link"
+		      link2="wrist_3_link" reason=""/>
+  <disable_collisions link1="shoulder_link"
+		      link2="forearm_link" reason=""/>
+  <disable_collisions link1="wrist_1_link"
+		      link2="wrist_3_link" reason=""/>
+  <disable_collisions link1="base_link_inertia"
+		      link2="shoulder_link" reason=""/>
+  <disable_collisions link1="forearm_link"
+		      link2="wrist_1_link" reason=""/>
+
+  <contact name="top">
+    <link name="support_link"/>
+    <point>
+       0.4  0.5 0.5
+      -0.4  0.5 0.5
+      -0.4 -0.5 0.5
+       0.4 -0.5 0.5
+    </point>
+    <shape>
+      4 0 1 2 3
+    </shape>
+  </contact>
+  
+
+</robot>
