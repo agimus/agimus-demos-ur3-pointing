@@ -14,23 +14,23 @@
   
   <link name="plaque_link">
     <visual>
-      <origin xyz="-0.0025 0.129 -0.1535" rpy="0 0 0" />
+      <origin xyz="0.129 -0.1535 -0.0025" rpy="0 0 0" />
       <geometry>
-        <box size="0.005 0.258 0.307 "/>
+        <box size="0.258 0.307 0.005"/>
       </geometry>
         <material name="white">
           <color rgba="1 1 1 1"/>
         </material>
     </visual>
     <collision>
-      <origin xyz="0.0025 -0.129 0.1535" rpy="0 0 0" />
+      <origin xyz="-0.129 -0.1535 -0.0025" rpy="0 0 0" />
       <geometry>
-        <box size="0.005 0.258 0.307 "/>
+        <box size="0.258 0.307 0.005"/>
       </geometry>
     </collision>
     <inertial>
       <mass value="2.2"/>
-       <origin xyz="0.0025 -0.129 0.1535" rpy="0 0 0" />
+       <origin xyz="-0.129 -0.1535 -0.0025" rpy="0 0 0" />
       <inertia ixx="0.1"  ixy="0"  ixz="0" iyy="0.1" iyz="0" izz="0.1" />
     </inertial>
   </link>
@@ -73,7 +73,7 @@
   <joint name="to_hole_00" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_00_link" />
-    <origin xyz="0 0.0275 -0.071" rpy="0 0 0" />
+    <origin xyz="0.0275 -0.071 0" rpy="0 0 0" />
   </joint>
 
   <link name="hole_01_link">
@@ -89,7 +89,7 @@
   <joint name="to_hole_01" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_01_link" />
-    <origin xyz=" 0 0.046 -0.071" rpy="0 0 0" />
+    <origin xyz="0.046 -0.071  0" rpy="0 0 0" />
   </joint>
   
   <link name="hole_03_link">
@@ -105,7 +105,7 @@
   <joint name="to_hole_03" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_03_link" />
-    <origin xyz="0 0.0275 -0.0925" rpy="0 0 0" />
+    <origin xyz="0.0275 -0.0925 0" rpy="0 0 0" />
   </joint>
   
     <link name="hole_04_link">
@@ -121,7 +121,7 @@
   <joint name="to_hole_04" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_04_link" />
-    <origin xyz=" 0 0.046 -0.0925" rpy="0 0 0" />
+    <origin xyz=" 0.046 -0.0925 0" rpy="0 0 0" />
   </joint>
 
   <link name="hole_05_link">
@@ -137,7 +137,7 @@
   <joint name="to_hole_05" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_05_link" />
-    <origin xyz="0 0.0275 -0.1145" rpy="0 0 0" />
+    <origin xyz="0.0275 -0.1145 0" rpy="0 0 0" />
   </joint>
 
   <link name="hole_02_link">
@@ -153,7 +153,7 @@
   <joint name="to_hole_02" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_02_link" />
-    <origin xyz="0 0.046 -0.1145" rpy="0 0 0" />
+    <origin xyz="0.046 -0.1145 0" rpy="0 0 0" />
   </joint>  
   
   <!-- Top right -->
@@ -170,7 +170,7 @@
   <joint name="to_hole_06" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_06_link" />
-    <origin xyz="0 0.2125 -0.071" rpy="0 0 0" />
+    <origin xyz=" 0.2125 -0.071 0" rpy="0 0 0" />
   </joint>
 
   <link name="hole_07_link">
@@ -186,7 +186,7 @@
   <joint name="to_hole_07" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_07_link" />
-    <origin xyz="0 0.231 -0.071" rpy="0 0 0" />
+    <origin xyz="0.231 -0.071 0" rpy="0 0 0" />
   </joint>      
 
   <link name="hole_08_link">
@@ -202,7 +202,7 @@
   <joint name="to_hole_08" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_08_link" />
-    <origin xyz="0 0.2125 -0.0925" rpy="0 0 0" />
+    <origin xyz="0.2125 -0.0925 0" rpy="0 0 0" />
   </joint>
   
   <link name="hole_09_link">
@@ -218,7 +218,7 @@
   <joint name="to_hole_09" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_09_link" />
-    <origin xyz="0 0.231 -0.0925" rpy="0 0 0" />
+    <origin xyz="0.231 -0.0925 0" rpy="0 0 0" />
   </joint>     
   
   <link name="hole_10_link">
@@ -234,7 +234,7 @@
   <joint name="to_hole_10" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_10_link" />
-    <origin xyz="0 0.2125 -0.1145" rpy="0 0 0" />
+    <origin xyz="0.2125 -0.1145 0" rpy="0 0 0" />
   </joint> 
   
   <link name="hole_11_link">
@@ -250,7 +250,7 @@
   <joint name="to_hole_11" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_11_link" />
-    <origin xyz="0 0.231 -0.1145" rpy="0 0 0" />
+    <origin xyz="0.231 -0.1145 0" rpy="0 0 0" />
   </joint>   
   
   <!-- Bottom left -->  
@@ -267,7 +267,7 @@
   <joint name="to_hole_12" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_12_link" />
-    <origin xyz="0 0.0275 -0.192" rpy="0 0 0" />
+    <origin xyz="0.0275 -0.192 0" rpy="0 0 0" />
   </joint>  
   
   <link name="hole_13_link">
@@ -283,7 +283,7 @@
   <joint name="to_hole_13" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_13_link" />
-    <origin xyz="0 0.046 -0.192" rpy="0 0 0" />
+    <origin xyz="0.046 -0.192 0" rpy="0 0 0" />
   </joint> 
   
   <link name="hole_14_link">
@@ -299,7 +299,7 @@
   <joint name="to_hole_14" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_14_link" />
-    <origin xyz="0 0.0275 -0.2135" rpy="0 0 0" />
+    <origin xyz="0.0275 -0.2135 0" rpy="0 0 0" />
   </joint>     
   
   <link name="hole_15_link">
@@ -315,7 +315,7 @@
   <joint name="to_hole_15" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_15_link" />
-    <origin xyz="0 0.046 -0.2135" rpy="0 0 0" />
+    <origin xyz="0.046 -0.2135 0" rpy="0 0 0" />
   </joint>   
   
   <link name="hole_16_link">
@@ -331,7 +331,7 @@
   <joint name="to_hole_16" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_16_link" />
-    <origin xyz="0 0.0275 -0.2355" rpy="0 0 0" />
+    <origin xyz="0.0275 -0.2355 0" rpy="0 0 0" />
   </joint>    
  
   <link name="hole_17_link">
@@ -347,7 +347,7 @@
   <joint name="to_hole_17" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_17_link" />
-    <origin xyz="0 0.046 -0.2355" rpy="0 0 0" />
+    <origin xyz="0.046 -0.2355 0" rpy="0 0 0" />
   </joint>  
     
     <!-- Bottom right -->   
@@ -364,7 +364,7 @@
   <joint name="to_hole_18" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_18_link" />
-    <origin xyz="0 0.2125 -0.192" rpy="0 0 0" />
+    <origin xyz="0.2125 -0.192 0" rpy="0 0 0" />
   </joint>
   
   <link name="hole_19_link">
@@ -380,7 +380,7 @@
   <joint name="to_hole_19" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_19_link" />
-    <origin xyz="0 0.231 -0.192" rpy="0 0 0" />
+    <origin xyz="0.231 -0.192 0" rpy="0 0 0" />
   </joint> 
   
   <link name="hole_20_link">
@@ -396,7 +396,7 @@
   <joint name="to_hole_20" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_20_link" />
-    <origin xyz="0 0.2125 -0.2135" rpy="0 0 0" />
+    <origin xyz="0.2125 -0.2135 0" rpy="0 0 0" />
   </joint>  
   
   <link name="hole_21_link">
@@ -412,7 +412,7 @@
   <joint name="to_hole_21" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_21_link" />
-    <origin xyz="0 0.231 -0.2135" rpy="0 0 0" />
+    <origin xyz="0.231 -0.2135 0" rpy="0 0 0" />
   </joint>   
   
   <link name="hole_22_link">
@@ -428,7 +428,7 @@
   <joint name="to_hole_22" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_22_link" />
-    <origin xyz="0 0.2125 -0.2355" rpy="0 0 0" />
+    <origin xyz="0.2125 -0.2355 0" rpy="0 0 0" />
   </joint> 
   
   <link name="hole_23_link">
@@ -444,6 +444,6 @@
   <joint name="to_hole_23" type="fixed">
     <parent link="plaque_link" />
     <child link="hole_23_link" />
-    <origin xyz="0 0.231 -0.2355" rpy="0 0 0" />
+    <origin xyz="0.231 -0.2355 0" rpy="0 0 0" />
   </joint>               
 </robot>

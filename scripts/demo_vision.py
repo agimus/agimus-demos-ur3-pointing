@@ -150,9 +150,9 @@ def norm(quaternion):
     return sqrt(sum([e*e for e in quaternion]))
 
 
-n = norm([0, -.707, 0, 0.707])
+n = norm([0, 0, 0.7071068, 0.7071068])
 
-partPose =  [0, -0.4, 1.01, 0, -0.707/n, 0, 0.707/n]
+partPose =  [-0.3, -0.4, 1.01, 0, 0, 0.7071068/n, 0.7071068/n]
 p#artPose =  [0.119, -0.3, 1.01, 0/n, 0/n, 0, 1]
 
 
@@ -349,10 +349,6 @@ v(q_init)
 
 pg.inStatePlanner.setEdge('Loop | f')
 pg.testGraph()
-
-
-
-
 
 #Test graph pas à pas
 from createConstraintGraph import test_edge, test_node

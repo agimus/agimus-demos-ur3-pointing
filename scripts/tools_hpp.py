@@ -77,7 +77,7 @@ class PathGenerator(object):
         self.cgraph = ps.hppcorba.problem.getProblem().getConstraintGraph()
         # create Planner to solve path planning problems on manifolds
         self.inStatePlanner = InStatePlanner(ps, graph)
-        self.inStatePlanner.maxIterPathPlanning = 100 #TODO ?
+        self.inStatePlanner.maxIterPathPlanning = 1000 #TODO ?
         self.inStatePlanner.timeOutPathPlanning = 15
         self.configs = {}
         self.isClogged = lambda x : False
@@ -393,8 +393,8 @@ class PathGenerator(object):
         return self.planTo(self.configs[name])
 
     def isHoleDoable(self, hole_id, qinit=None):
-        if hole_id in [17,20]:
-            return False
+        #if hole_id in [17,20]:
+        #    return False
         if self.graphValidation is None:
             raise RuntimeError("You should validate the graph first")
         coll = self.graphValidation.getCollisionsForNode("ur3e/gripper grasps part/handle_"+str(hole_id))
@@ -402,9 +402,10 @@ class PathGenerator(object):
             qinit = self.checkQInit(qinit)
             handle = 'part/handle_'+str(hole_id).zfill(2)
             res, qpg, qg = self.generateValidConfigForHandle(handle, qinit=qinit,
-                    qguesses = [qinit], NrandomConfig=100)
+                    qguesses = [qinit], NrandomConfig=1000)
             if not res or (qg is not None and not self.robot.isConfigValid(qg)[0]):
                 print("Cannot generate valid grasp config")
+                print(res)
                 return False
             return True
         else:

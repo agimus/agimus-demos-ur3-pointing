@@ -1,7 +1,7 @@
 from numpy import pi
 from hpp.corbaserver.manipulation import ConstraintGraph, ConstraintGraphFactory, Constraints
 from utils import norm, EulerToQuaternion
-from init_ur3 import robot, ps, q_init
+#from init_ur3 import robot, ps, q_init
 
 
 ######################################################
@@ -16,7 +16,7 @@ def createConstraintGraph():
     graph = ConstraintGraph(robot, 'graph2')
     factory = ConstraintGraphFactory(graph)
     #Set gripper
-    factory.setGrippers(["ur3e/GRIPPER",])
+    factory.setGrippers(["ur3e/gripper",])
     #Set kapla
     factory.setObjects(["kapla",], [part_handles], [["ur3e/top",],])
     factory.generate()
@@ -42,7 +42,7 @@ def createConstraintGraphCustom():
     print(qx, qy, qz, qw)
     ps.createTransformationConstraint(
             'grasp', 
-            'ur3e/GRIPPER',
+            'ur3e/gripper',
             'kapla/root_joint',
             [0, 0, 0, 0, 0, 0, 1],
             [True, True, True, True, True, True,],)
