@@ -100,25 +100,16 @@ vf = ViewerFactory(ps)
 ## Shrink joint bounds of UR-5
 #
 jointBounds = dict()
-jointBounds["default"] = [ (jn, robot.getJointBounds(jn)) \
-                           if not jn.startswith('ur3/') else
-                           (jn, [-pi, pi]) for jn in robot.jointNames]
 jointBounds["limited"] = [('ur3e/shoulder_pan_joint', [-pi, pi]),
   ('ur3e/shoulder_lift_joint', [-pi, pi]),
   ('ur3e/elbow_joint', [-3.1, 3.1]),
-  ('ur3e/wrist_1_joint', [-3.2, 3.2]),
+  ('ur3e/wrist_1_joint', [-3.9, 3.2]),
   ('ur3e/wrist_2_joint', [-3.2, 3.2]),
   ('ur3e/wrist_3_joint', [-3.2, 3.2])]
-# Bounds to generate calibration configurations
-jointBounds["calibration"] = [('ur3e/shoulder_pan_joint', [-2.5, 2.5]),
-  ('ur3e/shoulder_lift_joint', [-2.5, 2.5]),
-  ('ur3e/elbow_joint', [-2.5, 2.5]),
-  ('ur3e/wrist_1_joint', [-2.5, 2.5]),
-  ('ur3e/wrist_2_joint', [-2.5, 2.5]),
-  ('ur3e/wrist_3_joint', [-2.5, 2.5])]
+
 setRobotJointBounds("limited")
+
 ## Remove some collision pairs
-#
 ur3JointNames = list(filter(lambda j: j.startswith("ur3/"), robot.jointNames))
 ur3LinkNames = [ robot.getLinkNames(j) for j in ur3JointNames ]
 
@@ -134,7 +125,7 @@ Part = class_()
 
 vf.loadRobotModel (Part, "part")
 
-#Kapla joint
+#Part joint
 robot.setJointBounds('part/root_joint', [-0.388, 0.372,
                                           -0.795, 0.135, 
                                            1.008, 1.7392])
@@ -143,18 +134,14 @@ print(f"{Part.__class__.__name__} loaded")
 robot.client.manipulation.robot.insertRobotSRDFModel\
     ("ur3e", "package://agimus_demos/srdf/ur3_robot.srdf")
 
-# VISUAL(modification pour voir le visual servoing sur Gazebo)
-# JESSY 07/12 change partPose[0]: 1.4 -> 1.6
-#partPose =  [0.119, -0.371, 1.01, 0, 0, 0, 1]
+
 def norm(quaternion):
     return sqrt(sum([e*e for e in quaternion]))
 
 
 n = norm([0, 0, 0.7071068, 0.7071068])
 
-partPose =  [-0.3, -0.4, 1.01, 0, 0, 0.7071068/n, 0.7071068/n]
-p#artPose =  [0.119, -0.3, 1.01, 0/n, 0/n, 0, 1]
-
+partPose =  [0, -0.45, 1.01, 0, 0, 0.7071068/n, 0.7071068/n]
 
 
 ## Define initial configuration
@@ -165,17 +152,15 @@ q0[:6] = [0, -pi/2, 0.89*pi,-pi/2, -pi, 0.5]
 ## Define initial configuration
 q0 = robot.getCurrentConfig()
 
-q_calib_2 = [-0.0314868132220667, -0.3098681608783167, -0.7921517531024378, -0.4463098684894007, -1.567646328602926, -0.0652702490435999,  0.119, -0.3, 1.01, 0, 0, 0.707, -0.707]
+q_calib_2 = [-0.0314868132220667, -0.3098681608783167, -0.7921517531024378, -0.4463098684894007, -1.567646328602926, -0.0652702490435999,  0, 0, 0, 0, 0, 0, 0]
 
 
 r = robot.rankInConfiguration['part/root_joint']
 q0[r:r+7] = partPose
 q_calib_2[r:r+7] = partPose
-
-
-
-
 gripper = 'ur3e/gripper'
+
+
 ## Create specific constraint for a given handle
 #  Rotation is free along x axis.
 #  Note that locked part should be added to loop edge.
@@ -233,6 +218,7 @@ def createConstraintGraph():
                         constraints = Constraints(numConstraints=\
                                                 ['placement/complement']))
     sm = SecurityMargins(ps, factory, ["ur3e", "part"])
+    sm.setSecurityMarginBetween("universe", "part", float("inf"))
     sm.setSecurityMarginBetween("ur3e", "part", 0.015)
     sm.setSecurityMarginBetween("ur3e", "ur3e", 0)
     sm.defaultMargin = 0.01
@@ -258,16 +244,17 @@ except:
 ri = None
 ri = RosInterface(robot)
 q_init = ri.getCurrentConfig(q0)
-# q_init = q0 #robot.getCurrentConfig()
-pg = PathGenerator(ps, graph, ri, v, q_calib_2)
+
+pg = PathGenerator(ps, graph, ri, v, q_init)
 pg.inStatePlanner.setEdge('Loop | f')
 pg.testGraph()
 NB_holes = 5 * 7
 NB_holes_total = 44
 hidden_holes = [0,2,10,11,12,14,16,24,33]
 holes_to_do = [i for i in range(NB_holes) if i not in hidden_holes]
+
 pg.setIsClogged(None)
-ps.setTimeOutPathPlanning(10)
+ps.setTimeOutPathPlanning(120)
 
 if useFOV:
     def configHPPtoFOV(q):
@@ -302,7 +289,6 @@ if useFOV:
     visibleFeatures = lambda x : ur3_fov.visible(x, robot, featuress)
 
 ### DEMO
-
 def getDoableHoles():
     doableHoles = []
     non_doableHoles = []
@@ -321,11 +307,11 @@ def doDemo():
     demo_holes = range(NB_holes_to_do)
     pids, qend = pg.planPointingPaths(demo_holes)
 
-holist = [7,8,9,42,43,13]
+#holist = [7,8,9,42,43,13]
 v(q_init)
 
 
-### SUITE
+### Calibration
 from calibration import Calibration, checkData
 
 calibration = Calibration(ps, graph, factory)
@@ -336,36 +322,31 @@ calibration.addStateToConstraintGraph()
 #calibration.generateConfigurationsAndPaths(q_init, nbConfigs = 10)
 
 ############
-q_init = q_calib_2[::]
 i = 0
 p = 0
 
+q_init = ri.getObjectPose(q_init)
 
 #Set Init
-#q_init = q_init_simu[::]
 ps.setInitialConfig(q_init)
 v(q_init)
-
-
-pg.inStatePlanner.setEdge('Loop | f')
-pg.testGraph()
 
 #Test graph pas à pas
 from createConstraintGraph import test_edge, test_node
 
-
 while(i<1):
     i +=1
-    res, q1, err = test_edge('ur3e/gripper > part/handle_00 | f', q_init, graph, robot)
+    res, q1, err = test_edge('ur3e/gripper > part/handle_10 | f', q_init, graph, robot)
     p = 1
     v(q1)
     if not res: continue
     res, q2, err = test_edge('Loop | 0-0', q1, graph, robot)
     if not res: continue
-    res, q3, err = test_edge('ur3e/gripper < part/handle_00 | 0-0', q2, graph, robot)
+    res, q3, err = test_edge('ur3e/gripper < part/handle_10 | 0-0', q2, graph, robot)
     print(res, err)
     
-    
+#Build path
+ps.setInitialConfig(q_init) 
 
 
 

@@ -38,7 +38,7 @@ Action.maxControlSqrNorm = 20
 # Action to be performed at start of pre-action of transition
 # "ur10e/gripper > part/handle_{} | f_12"
 class ObjectLocalization(object):
-    timeout = 5
+    timeout = 20
     def __init__(self, sotrobot, factory, gripper, handle):
         self.sotrobot = sotrobot
         self.objectLocalization = factory.tasks.getGrasp(gripper, handle)\
