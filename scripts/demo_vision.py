@@ -104,7 +104,7 @@ jointBounds["limited"] = [('ur3e/shoulder_pan_joint', [-pi, pi]),
   ('ur3e/shoulder_lift_joint', [-pi, pi]),
   ('ur3e/elbow_joint', [-3.1, 3.1]),
   ('ur3e/wrist_1_joint', [-3.9, 3.2]),
-  ('ur3e/wrist_2_joint', [-3.2, 3.2]),
+  ('ur3e/wrist_2_joint', [-4.8, 3.2]),
   ('ur3e/wrist_3_joint', [-3.2, 3.2])]
 
 setRobotJointBounds("limited")
@@ -151,13 +151,13 @@ q0[:6] = [0, -pi/2, 0.89*pi,-pi/2, -pi, 0.5]
 
 ## Define initial configuration
 q0 = robot.getCurrentConfig()
-
-q_calib_2 = [-0.0314868132220667, -0.3098681608783167, -0.7921517531024378, -0.4463098684894007, -1.567646328602926, -0.0652702490435999,  0, 0, 0, 0, 0, 0, 0]
+q_calib = [-0.11230117479433233, -0.570446793233053, -0.6386836210833948, -0.47266132036318, -1.5677784124957483, -0.1450431982623499,  0, 0, 0, 0, 0, 0, 0]
+#q_calib_2 = [-0.0314868132220667, -0.3098681608783167, -0.7921517531024378, -0.4463098684894007, -1.567646328602926, -0.0652702490435999,  0, 0, 0, 0, 0, 0, 0]
 
 
 r = robot.rankInConfiguration['part/root_joint']
 q0[r:r+7] = partPose
-q_calib_2[r:r+7] = partPose
+q_calib[r:r+7] = partPose
 gripper = 'ur3e/gripper'
 
 
@@ -218,7 +218,7 @@ def createConstraintGraph():
                         constraints = Constraints(numConstraints=\
                                                 ['placement/complement']))
     sm = SecurityMargins(ps, factory, ["ur3e", "part"])
-    sm.setSecurityMarginBetween("universe", "part", float("inf"))
+    sm.setSecurityMarginBetween("universe", "part", float("-inf"))
     sm.setSecurityMarginBetween("ur3e", "part", 0.015)
     sm.setSecurityMarginBetween("ur3e", "ur3e", 0)
     sm.defaultMargin = 0.01
@@ -326,14 +326,15 @@ i = 0
 p = 0
 
 q_init = ri.getObjectPose(q_init)
-
 #Set Init
 ps.setInitialConfig(q_init)
 v(q_init)
 
+#getDoableHoles()
+
 #Test graph pas à pas
 from createConstraintGraph import test_edge, test_node
-
+"""
 while(i<1):
     i +=1
     res, q1, err = test_edge('ur3e/gripper > part/handle_10 | f', q_init, graph, robot)
@@ -344,9 +345,15 @@ while(i<1):
     if not res: continue
     res, q3, err = test_edge('ur3e/gripper < part/handle_10 | 0-0', q2, graph, robot)
     print(res, err)
-    
-#Build path
-ps.setInitialConfig(q_init) 
+ """   
+
+def executeholes(l, q_init=q_init):
+    for i in l:
+        q_init = ri.getCurrentConfig(q_init)
+        id, q = pg.planPointingPathForHole(i, q_init, 50)
+        pg.demo_execute(id, steps=False, visualize=False)
+        
+        
 
 
 

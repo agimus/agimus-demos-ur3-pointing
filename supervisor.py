@@ -35,6 +35,52 @@ from dynamic_graph.ros.ros_publish import RosPublish
 
 Action.maxControlSqrNorm = 20
 
+class CloseGripper(object):
+    timeout = 5
+    def __init__(self, sotrobot):
+        self.sotrobot = sotrobot
+        self.gripperCloseTopic = "/agimus/sot/gripper_status"
+        self.gripperClosePublisher = RosPublish("GripperClose")
+        self.gripperClosePublisher.add('boolean', 'gripperClosePublisher_', self.gripperCloseTopic)
+        self.gripperClosePublisher.signal('gripperClosePublisher_').value = True
+
+    def __call__(self):
+        ts = self.sotrobot.device.getTimeStep()
+        to = int(self.timeout / self.sotrobot.device.getTimeStep())
+        start_it = self.sotrobot.device.control.time
+        while True:
+            t = self.sotrobot.device.control.time
+            if t > start_it + to:
+                print("Failed to grasp")
+                return False, "Failed to grasp"
+            else:
+                self.gripperClosePublisher.signal('trigger').recompute(t)
+                time.sleep(ts)
+                time.sleep(3.)
+                return True, ""      
+class OpenGripper(object):
+    timeout = 5
+    def __init__(self, sotrobot):
+        self.sotrobot = sotrobot
+        self.gripperOpenTopic = "/agimus/sot/gripper_status"
+        self.gripperOpenPublisher = RosPublish("GripperOpen")
+        self.gripperOpenPublisher.add('boolean', 'gripperOpenPublisher_', self.gripperOpenTopic)
+        self.gripperOpenPublisher.signal('gripperOpenPublisher_').value = False
+
+    def __call__(self):
+        ts = self.sotrobot.device.getTimeStep()
+        to = int(self.timeout / self.sotrobot.device.getTimeStep())
+        start_it = self.sotrobot.device.control.time
+        while True:
+            t = self.sotrobot.device.control.time
+            if t > start_it + to:
+                print("Failed to grasp")
+                return False, "Failed to grasp"
+            else:
+                self.gripperOpenPublisher.signal('trigger').recompute(t)
+                time.sleep(ts)
+                time.sleep(3.)
+                return True, ""
 # Action to be performed at start of pre-action of transition
 # "ur10e/gripper > part/handle_{} | f_12"
 class ObjectLocalization(object):
@@ -156,9 +202,36 @@ def makeSupervisorWithFactory(robot):
         #        append(ol)
 
         id = factory.handles.index(h)
+        
+    
         transitionName_21 = '{} < {} | 0-{}_21'.format(g, h, id)
         supervisor.preActions[transitionName_21].preActions.append(wait)
     #localizeObjectOnLoopTransition(supervisor, factory.handles)
+    
+    closeGripper = CloseGripper(robot)
+    openGripper = OpenGripper(robot)
+    """
+    #Grasp 12 to 17
+    for i in range(12, 18):
+        transitionName_12 = '{} < part/handle_{} | 0-{}_21'.format(g, i, i)
+        supervisor.actions[transitionName_12].preActions.append(closeGripper)
+        #supervisor.actions['ur3e/gripper < part/handle_18 | 0-18_21'].preActions
+    #Release 18 to 23
+    for i in range(18, 24):
+        transitionName_12 = '{} < part/handle_{} | 0-{}_21'.format(g, i, i)
+        supervisor.actions[transitionName_12].preActions.append(openGripper)
+    """
+    #Grasp nuts
+    for i in range(36, 39):  
+        transitionName_12 = '{} < part/handle_{} | 0-{}_21'.format(g, i, i)
+        supervisor.actions[transitionName_12].preActions.append(closeGripper)
+        
+    #Release on screws    
+    for i in range(24, 36):
+        transitionName_12 = '{} < part/handle_{} | 0-{}_21'.format(g, i, i)
+        supervisor.actions[transitionName_12].preActions.append(openGripper)
+
+    
     return factory, supervisor
 
 

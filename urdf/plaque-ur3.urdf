@@ -12,6 +12,10 @@
     <color rgba="1 0 0 1.0"/>
   </material>
   
+  <link name="base_link"/>
+  
+  <!-- Plaque -->
+  
   <link name="plaque_link">
     <visual>
       <origin xyz="0.129 -0.1535 -0.0025" rpy="0 0 0" />
@@ -40,8 +44,37 @@
     <child link="plaque_link"/>
     <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
+  
+  <!-- Sheet 
 
-  <link name="base_link"/>
+  <link name="sheet_link">
+    <visual>
+      <origin xyz="0.0505 -0.0745 -0.00005" rpy="0 0 0" />
+      <geometry>
+        <box size="0.101 0.149  0.0001"/>
+      </geometry>
+        <material name="white">
+          <color rgba="1 1 1 1"/>
+        </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0505 -0.0745 -0.00005" rpy="0 0 0" />
+      <geometry>
+        <box size="0.101 0.149  0.0001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="2.2"/>
+        <origin xyz="0.0505 -0.0745 -0.00005" rpy="0 0 0" />
+      <inertia ixx="0.1"  ixy="0"  ixz="0" iyy="0.1" iyz="0" izz="0.1" />
+    </inertial>
+  </link>
+
+  <joint name="sheet_joint" type="fixed">
+    <parent link="plaque_link"/>
+    <child link="sheet_link"/>
+    <origin xyz="0.258 -0.079 -0.005" rpy="0 0 0"/>
+  </joint> -->
   
    <link name="hole_ref_link">
     <visual>
@@ -58,7 +91,252 @@
     <child link="hole_ref_link" />
     <origin xyz="0 0 0" rpy="0 0 0" />
   </joint>
-
+  
+  <!-- Nuts -->
+  <link name="nut_01_link">
+    <visual>
+        <geometry>
+            <cylinder radius="0.00135" length="0.007" />
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+    </visual>
+  </link>
+  <joint name="to_nut_01" type="fixed">
+    <parent link="plaque_link" />
+    <child link="nut_01_link" />
+    <origin xyz="0.129 -0.079 0" rpy="0 0 0" />
+  </joint> 
+  
+  <link name="nut_02_link">
+    <visual>
+        <geometry>
+            <cylinder radius="0.00135" length="0.007" />
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+    </visual>
+  </link>
+  <joint name="to_nut_02" type="fixed">
+    <parent link="plaque_link" />
+    <child link="nut_02_link" />
+    <origin xyz="0.129 -0.1535 0" rpy="0 0 0" />
+  </joint> 
+  
+   <link name="nut_03_link">
+    <visual>
+        <geometry>
+            <cylinder radius="0.00135" length="0.007" />
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+    </visual>
+  </link>
+  <joint name="to_nut_03" type="fixed">
+    <parent link="plaque_link" />
+    <child link="nut_03_link" />
+    <origin xyz="0.129 -0.228 0" rpy="0 0 0" />
+  </joint> 
+  
+  <!-- screws -->
+  <!-- First line -->
+  
+  <link name="screw_00_link">
+    <visual>
+        <geometry>
+            <cylinder radius="0.00125" length="0.008" />
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+    </visual>
+  </link>
+  <joint name="to_screw_00" type="fixed">
+    <parent link="plaque_link" />
+    <child link="screw_00_link" />
+    <origin xyz="0.104 -0.256 0" rpy="0 0 0" />
+  </joint> 
+  
+    <link name="screw_01_link">
+    <visual>
+        <geometry>
+            <cylinder radius="0.00125" length="0.008" />
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+    </visual>
+  </link>
+  <joint name="to_screw_01" type="fixed">
+    <parent link="plaque_link" />
+    <child link="screw_01_link" />
+    <origin xyz="0.129 -0.256 0" rpy="0 0 0" />
+  </joint>
+  
+  <link name="screw_02_link">
+    <visual>
+        <geometry>
+            <cylinder radius="0.00125" length="0.008" />
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+    </visual>
+  </link>
+  <joint name="to_screw_02" type="fixed">
+    <parent link="plaque_link" />
+    <child link="screw_02_link" />
+    <origin xyz="0.1585 -0.256 0" rpy="0 0 0" />
+  </joint> 
+  
+    <link name="screw_03_link">
+    <visual>
+        <geometry>
+            <cylinder radius="0.00125" length="0.008" />
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+    </visual>
+  </link>
+  <joint name="to_screw_03" type="fixed">
+    <parent link="plaque_link" />
+    <child link="screw_03_link" />
+    <origin xyz="0.179 -0.256 0" rpy="0 0 0" />
+  </joint>   
+  
+  <link name="screw_04_link">
+    <visual>
+        <geometry>
+            <cylinder radius="0.00125" length="0.008" />
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+    </visual>
+  </link>
+  <joint name="to_screw_04" type="fixed">
+    <parent link="plaque_link" />
+    <child link="screw_04_link" />
+    <origin xyz="0.204 -0.256 0" rpy="0 0 0" />
+  </joint>  
+  
+  <link name="screw_05_link">
+    <visual>
+        <geometry>
+            <cylinder radius="0.00125" length="0.008" />
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+    </visual>
+  </link>
+  <joint name="to_screw_05" type="fixed">
+    <parent link="plaque_link" />
+    <child link="screw_05_link" />
+    <origin xyz="0.229 -0.256 0" rpy="0 0 0" />
+  </joint> 
+  
+  <!-- Second line -->
+  <link name="screw_06_link">
+    <visual>
+        <geometry>
+            <cylinder radius="0.00125" length="0.008" />
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+    </visual>
+  </link>
+  <joint name="to_screw_06" type="fixed">
+    <parent link="plaque_link" />
+    <child link="screw_06_link" />
+    <origin xyz="0.104 -0.2725 0" rpy="0 0 0" />
+  </joint> 
+  
+    <link name="screw_07_link">
+    <visual>
+        <geometry>
+            <cylinder radius="0.00125" length="0.008" />
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+    </visual>
+  </link>
+  <joint name="to_screw_07" type="fixed">
+    <parent link="plaque_link" />
+    <child link="screw_07_link" />
+    <origin xyz="0.129 -0.2725 0" rpy="0 0 0" />
+  </joint>
+  
+  <link name="screw_08_link">
+    <visual>
+        <geometry>
+            <cylinder radius="0.00125" length="0.008" />
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+    </visual>
+  </link>
+  <joint name="to_screw_08" type="fixed">
+    <parent link="plaque_link" />
+    <child link="screw_08_link" />
+    <origin xyz="0.1585 -0.2725 0" rpy="0 0 0" />
+  </joint> 
+  
+    <link name="screw_09_link">
+    <visual>
+        <geometry>
+            <cylinder radius="0.00125" length="0.008" />
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+    </visual>
+  </link>
+  <joint name="to_screw_09" type="fixed">
+    <parent link="plaque_link" />
+    <child link="screw_09_link" />
+    <origin xyz="0.179 -0.2725 0" rpy="0 0 0" />
+  </joint>   
+  
+  <link name="screw_10_link">
+    <visual>
+        <geometry>
+            <cylinder radius="0.00125" length="0.008" />
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+    </visual>
+  </link>
+  <joint name="to_screw_10" type="fixed">
+    <parent link="plaque_link" />
+    <child link="screw_10_link" />
+    <origin xyz="0.204 -0.2725 0" rpy="0 0 0" />
+  </joint>  
+  
+  <link name="screw_11_link">
+    <visual>
+        <geometry>
+            <cylinder radius="0.00125" length="0.008" />
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+    </visual>
+  </link>
+  <joint name="to_screw_11" type="fixed">
+    <parent link="plaque_link" />
+    <child link="screw_11_link" />
+    <origin xyz="0.229 -0.2725 0" rpy="0 0 0" />
+  </joint> 
+  
 <!-- Top left -->
   <link name="hole_00_link">
     <visual>

@@ -8,6 +8,10 @@
   <arg name="simulation" default="false"/>
   <!-- YAML file that describes the demonstration: robots, objects-->
   <arg name="part" default="plaque-ur3"/>
+  <arg name="usb_port_gripper" default="/dev/ttyUSB0"/>
+  
+  <!-- start hardware communication with robotiq gripper -->
+  <node name="robotiq2FGripper" pkg="robotiq_2f_gripper_control" type="Robotiq2FGripperRtuNode.py" args="$(arg usb_port_gripper)" respawn="true" output="screen"/>
 
   <include file="$(find agimus_demos)/launch/ur3_pointing_world_setup.launch">
     <arg name="part" value="$(arg part)"/>

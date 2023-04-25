@@ -144,17 +144,93 @@
     <mask>1 1 1 1 1 1</mask>
 </handle>
 
-<contact name="bottom">
-    <link name="base_link"/>
-    <point>
-       0.1535  0.129 -0.0025
-      -0.1535  0.129 -0.0025
-      -0.1535 -0.129 -0.0025
-       0.1535 -0.129 -0.0025
-    </point>
-    <shape>
-      4 0 1 2 3
-    </shape>
-</contact>
+<handle name="handle_24" clearance="0.05">
+    <position xyz= "0 0 0" rpy="0 1.5707963 -1.5707963"/>
+    <link name="screw_00_link" />
+    <mask>1 1 1 1 1 1</mask>
+</handle>
 
+<handle name="handle_25" clearance="0.05">
+    <position xyz= "0 0 0" rpy="0 1.5707963 -1.5707963"/>
+    <link name="screw_01_link" />
+    <mask>1 1 1 1 1 1</mask>
+</handle>
+
+<handle name="handle_26" clearance="0.05">
+    <position xyz= "0 0 0" rpy="0 1.5707963 -1.5707963"/>
+    <link name="screw_02_link" />
+    <mask>1 1 1 1 1 1</mask>
+</handle>
+
+<handle name="handle_27" clearance="0.05">
+    <position xyz= "0 0 0" rpy="0 1.5707963 -1.5707963"/>
+    <link name="screw_03_link" />
+    <mask>1 1 1 1 1 1</mask>
+</handle>
+
+<handle name="handle_28" clearance="0.05">
+    <position xyz= "0 0 0" rpy="0 1.5707963 -1.5707963"/>
+    <link name="screw_04_link" />
+    <mask>1 1 1 1 1 1</mask>
+</handle>
+
+<handle name="handle_29" clearance="0.05">
+    <position xyz= "0 0 0" rpy="0 1.5707963 -1.5707963"/>
+    <link name="screw_05_link" />
+    <mask>1 1 1 1 1 1</mask>
+</handle>
+
+<handle name="handle_30" clearance="0.05">
+    <position xyz= "0 0 0" rpy="0 1.5707963 -1.5707963"/>
+    <link name="screw_06_link" />
+    <mask>1 1 1 1 1 1</mask>
+</handle>
+
+<handle name="handle_31" clearance="0.05">
+    <position xyz= "0 0 0" rpy="0 1.5707963 -1.5707963"/>
+    <link name="screw_07_link" />
+    <mask>1 1 1 1 1 1</mask>
+</handle>
+
+<handle name="handle_32" clearance="0.05">
+    <position xyz= "0 0 0" rpy="0 1.5707963 -1.5707963"/>
+    <link name="screw_08_link" />
+    <mask>1 1 1 1 1 1</mask>
+</handle>
+
+<handle name="handle_33" clearance="0.05">
+    <position xyz= "0 0 0" rpy="0 1.5707963 -1.5707963"/>
+    <link name="screw_09_link" />
+    <mask>1 1 1 1 1 1</mask>
+</handle>
+
+<handle name="handle_34" clearance="0.05">
+    <position xyz= "0 0 0" rpy="0 1.5707963 -1.5707963"/>
+    <link name="screw_10_link" />
+    <mask>1 1 1 1 1 1</mask>
+</handle>
+
+<handle name="handle_35" clearance="0.05">
+    <position xyz= "0 0 0" rpy="0 1.5707963 -1.5707963"/>
+    <link name="screw_11_link" />
+    <mask>1 1 1 1 1 1</mask>
+</handle>
+
+<handle name="handle_36" clearance="0.05">
+    <position xyz= "0 0 -0.004" rpy="0 1.5707963 -1.5707963"/>
+    <link name="nut_01_link" />
+    <mask>1 1 1 1 1 1</mask>
+</handle>
+
+<handle name="handle_37" clearance="0.05">
+    <position xyz= "0 0 -0.004" rpy="0 1.5707963 -1.5707963"/>
+    <link name="nut_02_link" />
+    <mask>1 1 1 1 1 1</mask>
+</handle>
+
+<handle name="handle_38" clearance="0.05">
+    <position xyz= "0 0 -0.004" rpy="0 1.5707963 -1.5707963"/>
+    <link name="nut_03_link" />
+    <mask>1 1 1 1 1 1</mask>
+</handle>
 </robot>

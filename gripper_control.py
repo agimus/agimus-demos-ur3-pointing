@@ -82,7 +82,7 @@ class GripperControl(object):
     def callback(self, msg):
 
         if msg.data: #Close
-            self.cmd.rPR = 195
+            self.cmd.rPR = 250
         else: #Open
             self.cmd.rPR = 0
         self.pub.publish(self.cmd)
