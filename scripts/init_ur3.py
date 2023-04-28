@@ -74,10 +74,16 @@ jointBounds = dict()
 jointBounds["limited"] = [('ur3e/shoulder_pan_joint', [-pi, pi]),
   ('ur3e/shoulder_lift_joint', [-pi, pi]),
   ('ur3e/elbow_joint', [-3.1, 3.1]),
+<<<<<<< HEAD
   ('ur3e/wrist_1_joint', [-3.2, 3.2]),
   ('ur3e/wrist_2_joint', [-3.2, 3.2]),
   ('ur3e/wrist_3_joint', [-3.2, 3.2]),
   ('ur3e/robotiq_85_left_knuckle_joint', [-0.01, 0.80285])]
+=======
+  ('ur3e/wrist_1_joint', [-3.9, 3.2]),
+  ('ur3e/wrist_2_joint', [-3.2, 3.2]),
+  ('ur3e/wrist_3_joint', [-3.2, 3.2])]
+>>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
 
 setRobotJointBounds("limited")
 
@@ -113,7 +119,11 @@ robot.client.manipulation.robot.insertRobotSRDFModel\
 
 #Pose Kapla
 qw, qx, qy, qz = EulerToQuaternion(0,0,0)
+<<<<<<< HEAD
 partPose = [0.1, -0.4, 1.009,qx,qy,qz, qw]
+=======
+partPose = [0.1, -0.4, 1.009, qx,qy,qz, qw]
+>>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
 
 ## Define initial configuration
 q0 = robot.getCurrentConfig()
@@ -127,3 +137,13 @@ ri = None
 ri = RosInterface(robot)
 q_init = ri.getCurrentConfig(q0)
 
+<<<<<<< HEAD
+=======
+#Poses
+q_init_simu = [0.7093702554702759, 0.37122035026550293, -1.22744065919985, -3.8984935919391077, -1.661405388508932, 0.3695860207080841, 0.1, -0.4, 1.009, 0.0, 0.0, 0.0, 1.0]
+## Calibration configuration: the part should be wholly visible
+q_calibLAAS = [1.5707, -3, 2.5, -2.8, -1.57, 0.0, 0.1, -0.4, 1.009, 0.0, 0.0, 0.0, 1.0]
+# Saint Nazaire calib configuration
+q_calibSN = [1.3707, -3.1, 2.1, -2.32, -1.57, 0.0, 0.1, -0.4, 1.009, 0.0, 0.0, 0.0, 1.0]
+
+>>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22

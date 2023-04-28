@@ -96,6 +96,7 @@
     </link>
 
      <link name="walls">
+<<<<<<< HEAD
       
      <!-- front wall -->
      <!-- visual -->
@@ -112,6 +113,9 @@
        </geometry>
       </collision>
       
+=======
+            
+>>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
       <!-- behind wall -->
      <visual>
 	<origin xyz="-0.385 -0.305 0.37"/>
@@ -192,16 +196,28 @@
      <child link = "base_link" />
       <origin xyz="0.0 0.0 1" rpy="0.0 0.0 -1.5707963" />
    </joint>
+<<<<<<< HEAD
    
     <link name="ee_gripper">
       <visual>
         <geometry>
           <!-- The path to the visual meshes in the package. -->
           <mesh filename="package://agimus_demos/ur3/pointing/meshes/gripper_2f85_opened.stl" scale = "0.0008 0.0008 0.0008" />
+=======
+    
+       
+   <!-- Gripper -->
+   
+    <link name="robotiq_85_gripper">
+     <visual>
+        <geometry>
+          <mesh filename="package://agimus_demos/ur3/pointing/meshes/gripper_2f85_opened.stl" scale = "0.001 0.001 0.001" />
+>>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
         </geometry>
       </visual>
       <collision>
         <geometry>
+<<<<<<< HEAD
           <!-- The path to the collision meshes in the package. -->
           <mesh filename="package://agimus_demos/ur3/pointing/meshes/gripper_2f85_opened.stl" scale = "0.0008 0.0008 0.0008" />
         </geometry>
@@ -221,15 +237,100 @@
     <joint name="tcp_joint" type="fixed">
       <origin xyz="0 0 0.116" rpy="0 0 0"/>
       <parent link="ee_gripper"/>
+=======
+          <mesh filename="package://agimus_demos/ur3/pointing/meshes/gripper_2f85_opened.stl" scale = "0.001 0.001 0.001" />
+        </geometry> 
+      </collision> >
+    </link>
+
+    <link name="robotiq_coupler">
+    <visual>
+      <geometry>
+        <mesh filename="package://agimus_demos/ur3/pointing/meshes/robotiq_85_coupler.stl" />
+      </geometry>
+      <material name="flat_black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://agimus_demos/ur3/pointing/meshes/robotiq_85_coupler.stl" />
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="2.073e-05   1.45286e-03  -1.1049e-03" rpy="0 0 0" />
+      <mass value="0.168" />
+      <inertia ixx="6.69695624e-05" ixy="5.21511788e-09" ixz="-2.74383009e-08" 
+               iyy="7.85088161e-05" iyz="5.41105193e-07" izz="1.41819717e-04"/>
+    </inertial>
+  </link>
+    
+  <joint name="robotiq_coupler_joint" type="fixed">
+    <origin xyz="0 0 0.01" rpy="0 0 ${-pi/2.0}" />
+    <parent link="tool0"/>
+    <child link="robotiq_coupler"/>
+  </joint>
+    
+  <!-- Attach the robotiq 85 gripper -->
+   <joint name="robotiq_85_gripper_joint" type="fixed">
+     <parent link="robotiq_coupler"/>
+     <child link="robotiq_85_gripper"/>
+    <origin xyz="-0.09 0 0" rpy="${pi/2} 0 ${pi/2}"/>
+  </joint> 
+   
+
+    <!-- TCP frame -->
+    <joint name="tcp_joint" type="fixed">
+      <origin xyz="0 0 0.116" rpy="0 0 0"/>
+      <parent link="robotiq_85_gripper"/>
+>>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
       <child link="tcp"/>
     </joint>
     <link name="tcp"/>
     
+<<<<<<< HEAD
+=======
+    <!-- Camera -->
+    
+    <link name="ur3_d435_mount_link">
+     <inertial>
+       <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+       <mass value="0.1"/>
+       <inertia ixx="0.001" ixy="0.0" ixz="0.0"
+         iyy="0.001" iyz="0.0"
+         izz="0.001" />
+     </inertial>
+     <visual>
+       <origin xyz="0 0 0" rpy="0 0 0" />
+       <geometry>
+         <mesh filename="package://agimus_demos/ur3/pointing/meshes/ur3_d435_mount.stl"/>
+       </geometry>
+       <material name="Red">
+         <color rgba="0.9 0.1 0.1 1.0"/>
+       </material>
+     </visual>
+     <collision>
+       <origin xyz="0 0 0" rpy="0 0 0" />
+       <geometry>
+         <mesh filename="package://agimus_demos/ur3/pointing/meshes/ur3_d435_mount.stl"/>
+       </geometry>
+     </collision>
+   </link>
+
+   <joint name="ur3_d435_mount_joint" type="fixed">
+     <parent link="wrist_3_link"/>
+     <child link="ur3_d435_mount_link" />
+     <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 3.14159265359" />
+   </joint>
+
+>>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
    <link name="ref_camera_link">
    </link>
 
     <joint name="ref_camera_joint" type="fixed">
+<<<<<<< HEAD
      <parent link="wrist_3_link" />
+=======
+     <parent link="ur3_d435_mount_link" />
+>>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
      <child link = "ref_camera_link" />
      <origin xyz="${camera_pose['camera']['x']}
                   ${camera_pose['camera']['y']}
@@ -245,4 +346,25 @@
      <!-- <origin xyz="0 0.115 0" rpy="0 -1.0472 -1.57079632679"/> -->
       <origin xyz="0 0 0" rpy="0 0 0"/>
    </xacro:sensor_d435>
+<<<<<<< HEAD
 </robot>
+=======
+   
+   
+      <!-- Axes -->
+  
+      <link name="gripper_axe">
+      </link>
+      
+       <joint name="gripper_axe_joint" type="fixed">
+        <origin xyz="0 0 0.16" rpy="${-pi/2} 0 ${-pi/2}"/>
+        <parent link="ur3_d435_mount_link"/>
+        <child link="gripper_axe"/>
+      </joint>
+      
+      
+
+         
+</robot>
+
+>>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22

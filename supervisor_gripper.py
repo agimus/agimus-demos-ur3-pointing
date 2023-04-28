@@ -35,9 +35,58 @@ from dynamic_graph.ros.ros_publish import RosPublish
 
 Action.maxControlSqrNorm = 20
 
+<<<<<<< HEAD
 # Action to be performed at start of pre-action of transition
 # "ur3e/gripper > part/handle_{} | f_12"
 
+=======
+class CloseGripper(object):
+    timeout = 5
+    def __init__(self, sotrobot):
+        self.sotrobot = sotrobot
+        self.gripperCloseTopic = "/agimus/sot/gripper_status"
+        self.gripperClosePublisher = RosPublish("GripperClose")
+        self.gripperClosePublisher.add('boolean', 'gripperClosePublisher_', self.gripperCloseTopic)
+        self.gripperClosePublisher.signal('gripperClosePublisher_').value = True
+
+    def __call__(self):
+        ts = self.sotrobot.device.getTimeStep()
+        to = int(self.timeout / self.sotrobot.device.getTimeStep())
+        start_it = self.sotrobot.device.control.time
+        while True:
+            t = self.sotrobot.device.control.time
+            if t > start_it + to:
+                print("Failed to grasp")
+                return False, "Failed to grasp"
+            else:
+                self.gripperClosePublisher.signal('trigger').recompute(t)
+                time.sleep(ts)
+                time.sleep(3.)
+                return True, ""    
+class OpenGripper(object):
+    timeout = 5
+    def __init__(self, sotrobot):
+        self.sotrobot = sotrobot
+        self.gripperOpenTopic = "/agimus/sot/gripper_status"
+        self.gripperOpenPublisher = RosPublish("GripperOpen")
+        self.gripperOpenPublisher.add('boolean', 'gripperOpenPublisher_', self.gripperOpenTopic)
+        self.gripperOpenPublisher.signal('gripperOpenPublisher_').value = False
+
+    def __call__(self):
+        ts = self.sotrobot.device.getTimeStep()
+        to = int(self.timeout / self.sotrobot.device.getTimeStep())
+        start_it = self.sotrobot.device.control.time
+        while True:
+            t = self.sotrobot.device.control.time
+            if t > start_it + to:
+                print("Failed to grasp")
+                return False, "Failed to grasp"
+            else:
+                self.gripperOpenPublisher.signal('trigger').recompute(t)
+                time.sleep(ts)
+                time.sleep(3.)
+                return True, ""               
+>>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
 def wait():
     print("Waiting 1 second")
     time.sleep(1)
@@ -100,6 +149,7 @@ def makeSupervisorWithFactory(robot):
     from hpp.corbaserver.manipulation import Rule
     factory.setupFrames(srdf["grippers"], srdf["handles"], robot)
     for k in handlesPerObjects[0]:
+<<<<<<< HEAD
         factory.handleFrames[k].hasVisualTag = True
     factory.generate()
 
@@ -118,6 +168,10 @@ supervisor.plugSot("")
     #####################    
     ### Modifications ###
     #####################
+=======
+        factory.handleFrames[k].hasVisualTag = False
+    
+>>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
     def makeLoopTransitionBIS (factory, state,edge):
         sot = factory._newSoT ('sot_'+edge)
         from agimus_sot.events import logical_and_entity
@@ -135,6 +189,7 @@ supervisor.plugSot("")
     print(grasps)
     state = factory.makeState(grasps, 1)
     makeLoopTransitionBIS(factory, state, 'transit')    
+<<<<<<< HEAD
     grasps = (None,) * len(factory.grippers)
     print(grasps)
     state = factory.makeState(grasps, 1)
@@ -143,6 +198,15 @@ supervisor.plugSot("")
     state = factory.makeState(grasps, 1)
     makeLoopTransitionBIS(factory, state, 'grasp_kapla')
 
+=======
+
+    state = factory.makeState(grasps, 1)
+    makeLoopTransitionBIS(factory, state, 'approach_kapla')
+    
+    state = factory.makeState(grasps, 1)
+    makeLoopTransitionBIS(factory, state, 'grasp_kapla')
+    
+>>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
     state = factory.makeState(grasps, 1)
     makeLoopTransitionBIS(factory, state, 'take_kapla_up')
     
@@ -157,6 +221,7 @@ supervisor.plugSot("")
     
     state = factory.makeState(grasps, 1)
     makeLoopTransitionBIS(factory, state, 'put_kapla_down')
+<<<<<<< HEAD
 
     state = factory.makeState(grasps, 1)
     makeLoopTransitionBIS(factory, state, 'move_gripper_up')
@@ -164,3 +229,41 @@ supervisor.plugSot("")
     state = factory.makeState(grasps, 1)
     makeLoopTransitionBIS(factory, state, 'move_gripper_away')
 """
+=======
+    
+    state = factory.makeState(grasps, 1)
+    makeLoopTransitionBIS(factory, state, 'move_gripper_up')
+    
+    state = factory.makeState(grasps, 1)
+    makeLoopTransitionBIS(factory, state, 'move_gripper_away')
+    
+    
+    factory.generate()
+       
+    #post Action
+    closeGripper = CloseGripper(robot)
+    supervisor.actions['take_kapla_up'].preActions.append(closeGripper)
+    
+    openGripper = OpenGripper(robot)
+    supervisor.actions['move_gripper_up'].preActions.append(openGripper)
+    
+   
+    #{'ur3e/GRIPPER > kapla/handle | f_12': {'ur3e/GRIPPER grasps kapla/handle': <agimus_sot.action.Action object at 0x7f65f22841f0>}, 
+   # 'ur3e/GRIPPER < kapla/handle | 0-0_21': {'free': <agimus_sot.action.Action object at 0x7f65f2284d30>}}
+
+    #{'ur3e/GRIPPER > kapla/handle | f_12': {'ur3e/GRIPPER grasps kapla/handle': <agimus_sot.action.Action object at 0x7f6ea10d8bb0>},
+    # 'ur3e/GRIPPER < kapla/handle | 0-0_21': {'free': <agimus_sot.action.Action object at 0x7f6ea10d8490>}}
+
+
+    supervisor.makeInitialSot()
+    return factory, supervisor
+
+
+# Use service /agimus/sot/set_base_pose to set initial config
+factory, supervisor = makeSupervisorWithFactory(robot)
+
+supervisor.plugTopicsToRos()
+supervisor.plugSot("")
+
+     
+>>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22

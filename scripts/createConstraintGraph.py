@@ -1,7 +1,11 @@
 from numpy import pi
 from hpp.corbaserver.manipulation import ConstraintGraph, ConstraintGraphFactory, Constraints
 from utils import norm, EulerToQuaternion
+<<<<<<< HEAD
 from init_ur3 import robot, ps, q_init
+=======
+#from init_ur3 import robot, ps, q_init
+>>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
 
 
 ######################################################
@@ -16,6 +20,7 @@ def createConstraintGraph():
     graph = ConstraintGraph(robot, 'graph2')
     factory = ConstraintGraphFactory(graph)
     #Set gripper
+<<<<<<< HEAD
     factory.setGrippers(["ur3e/GRIPPER",])
     #Gripper Constraints
     left_gripper_lock, right_gripper_lock = createGripperLockedJoints (ps, q_init)
@@ -25,6 +30,9 @@ def createConstraintGraph():
         numConstraints= left_gripper_lock + right_gripper_lock,
     ),
     )
+=======
+    factory.setGrippers(["ur3e/gripper",])
+>>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
     #Set kapla
     factory.setObjects(["kapla",], [part_handles], [["ur3e/top",],])
     factory.generate()
@@ -43,6 +51,7 @@ def createConstraintGraph():
 def createConstraintGraphCustom():
     graph = ConstraintGraph(robot, 'graph2')
     factory = ConstraintGraphFactory(graph)
+<<<<<<< HEAD
     
     #Gripper Constraints
     left_gripper_lock, right_gripper_lock = createGripperLockedJoints (ps, q_init)
@@ -59,6 +68,16 @@ def createConstraintGraphCustom():
     ps.createTransformationConstraint(
             'grasp', 
             'ur3e/GRIPPER',
+=======
+
+    #Constraints
+    qw, qx, qy, qz = EulerToQuaternion(pi,pi/2,0)
+    qx, qy, qz, qw = -0.5, -0.5, 0.5, -0.5
+    print(qx, qy, qz, qw)
+    ps.createTransformationConstraint(
+            'grasp', 
+            'ur3e/gripper',
+>>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
             'kapla/root_joint',
             [0, 0, 0, 0, 0, 0, 1],
             [True, True, True, True, True, True,],)
@@ -80,9 +99,15 @@ def createConstraintGraphCustom():
     
     ps.createTransformationConstraint(
             'pre-grasp', 
+<<<<<<< HEAD
             'ur3e/robotiq_85_base_link',
             'kapla/root_joint',
             [0.20, 0, 0,qx, qy, qz, qw],
+=======
+            'ur3e/robotiq_85_gripper',
+            'kapla/root_joint',
+            [0, 0.20,0.075,qx, qy, qz, qw],
+>>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
             [True, True, True, True, True, True,],)
      
     ps.createTransformationConstraint(
@@ -151,6 +176,7 @@ def createConstraintGraphCustom():
             graph.setWeight(e, 0)
     return factory, graph
     
+<<<<<<< HEAD
 
 def createConstraintGraphPointing():
     # Return a list of available elements of type type handle
@@ -200,6 +226,8 @@ def createConstraintGraphPointing():
     return factory, graph
 
 
+=======
+>>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
 # Create locked joint for grippers
 def createGripperLockedJoints (ps, q):
     left_gripper_lock = list()

@@ -1,0 +1,16 @@
+<robot name="plank-with-april-tags">
+  <link name="base_link">
+    <!-- calibration chessboard-->
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+	<mesh filename="package://gerard_bauzil/meshes/visp/chessboard-10-7.dae" scale="0.027 0.027 1."/>
+      </geometry>
+    </visual>
+    <inertial>
+      <mass value="5.0"/>
+      <origin xyz="0 0 0.973" rpy="0 0 0"/>
+      <inertia ixx="7.3" ixy="0" ixz="0" iyy="5.72" iyz="0" izz="1.58"/>
+    </inertial>
+  </link>
+</robot>
