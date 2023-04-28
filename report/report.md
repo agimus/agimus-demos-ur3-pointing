@@ -1,6 +1,6 @@
 This files reports on experiments run on the UR10e robot
 
-Investigations on random crashes of "ur3e_bringup.launch".
+Investigations on random crashes of "ur3_bringup.launch".
 -----------------------------------------------------------
 
 Test 1

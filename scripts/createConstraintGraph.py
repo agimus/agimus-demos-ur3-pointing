@@ -1,11 +1,7 @@
 from numpy import pi
 from hpp.corbaserver.manipulation import ConstraintGraph, ConstraintGraphFactory, Constraints
 from utils import norm, EulerToQuaternion
-<<<<<<< HEAD
-from init_ur3 import robot, ps, q_init
-=======
 #from init_ur3 import robot, ps, q_init
->>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
 
 
 ######################################################
@@ -20,21 +16,9 @@ def createConstraintGraph():
     graph = ConstraintGraph(robot, 'graph2')
     factory = ConstraintGraphFactory(graph)
     #Set gripper
-<<<<<<< HEAD
-    factory.setGrippers(["ur3e/GRIPPER",])
-    #Gripper Constraints
-    left_gripper_lock, right_gripper_lock = createGripperLockedJoints (ps, q_init)
-    graph.addConstraints(
-    graph=True,
-    constraints=Constraints(
-        numConstraints= left_gripper_lock + right_gripper_lock,
-    ),
-    )
-=======
-    factory.setGrippers(["ur3e/gripper",])
->>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
+    factory.setGrippers(["ur3/gripper",])
     #Set kapla
-    factory.setObjects(["kapla",], [part_handles], [["ur3e/top",],])
+    factory.setObjects(["kapla",], [part_handles], [["ur3/top",],])
     factory.generate()
 
     graph.initialize()
@@ -51,24 +35,6 @@ def createConstraintGraph():
 def createConstraintGraphCustom():
     graph = ConstraintGraph(robot, 'graph2')
     factory = ConstraintGraphFactory(graph)
-<<<<<<< HEAD
-    
-    #Gripper Constraints
-    left_gripper_lock, right_gripper_lock = createGripperLockedJoints (ps, q_init)
-    graph.addConstraints(
-    graph=True,
-    constraints=Constraints(
-        numConstraints= left_gripper_lock + right_gripper_lock,
-    ),
-    )
-
-    #Constraints
-    qw, qx, qy, qz = EulerToQuaternion(pi,pi/2,0)
-        
-    ps.createTransformationConstraint(
-            'grasp', 
-            'ur3e/GRIPPER',
-=======
 
     #Constraints
     qw, qx, qy, qz = EulerToQuaternion(pi,pi/2,0)
@@ -76,8 +42,7 @@ def createConstraintGraphCustom():
     print(qx, qy, qz, qw)
     ps.createTransformationConstraint(
             'grasp', 
-            'ur3e/gripper',
->>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
+            'ur3/gripper',
             'kapla/root_joint',
             [0, 0, 0, 0, 0, 0, 1],
             [True, True, True, True, True, True,],)
@@ -99,15 +64,9 @@ def createConstraintGraphCustom():
     
     ps.createTransformationConstraint(
             'pre-grasp', 
-<<<<<<< HEAD
-            'ur3e/robotiq_85_base_link',
-            'kapla/root_joint',
-            [0.20, 0, 0,qx, qy, qz, qw],
-=======
-            'ur3e/robotiq_85_gripper',
+            'ur3/robotiq_85_gripper',
             'kapla/root_joint',
             [0, 0.20,0.075,qx, qy, qz, qw],
->>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
             [True, True, True, True, True, True,],)
      
     ps.createTransformationConstraint(
@@ -120,7 +79,7 @@ def createConstraintGraphCustom():
     ps.createTransformationConstraint(
             'pre-grasp/complement', 
             '',
-            'ur3e/wrist_3_joint',
+            'ur3/wrist_3_joint',
             [0, 0, 1.109, 0,0,0,1],
             [True, True, False, False, False, False,],)
     
@@ -176,58 +135,6 @@ def createConstraintGraphCustom():
             graph.setWeight(e, 0)
     return factory, graph
     
-<<<<<<< HEAD
-
-def createConstraintGraphPointing():
-    # Return a list of available elements of type type handle
-    all_handles = ps.getAvailable('handle')
-    part_handles = list(filter(lambda x: x.startswith("part/"), all_handles))
-
-    graph = ConstraintGraph(robot, 'graph2')
-    factory = ConstraintGraphFactory(graph)
-    factory.setGrippers(["ur3e/gripper",])
-    factory.setObjects(["part",], [part_handles], [[]])
-    factory.generate()
-    for handle in all_handles:
-        loopEdge = 'Loop | 0-{}'.format(factory.handles.index(handle))
-        graph.addConstraints(edge = loopEdge, constraints = Constraints
-            (numConstraints=['part/root_joint']))
-
-    n = norm([-0.576, -0.002, 0.025, 0.817])
-    ps.createTransformationConstraint('look-at-part', 'part/base_link', 'ur3e/wrist_3_link',
-                                    [-0.126, -0.611, 1.209, -0.576/n, -0.002/n, 0.025/n, 0.817/n],
-                                    [True, True, True, True, True, True,])
-    graph.createNode(['look-at-part'])
-    graph.createEdge('free', 'look-at-part', 'go-look-at-part', 1, 'free')
-    graph.createEdge('look-at-part', 'free', 'stop-looking-at-part', 1, 'free')
-
-    graph.addConstraints(node='look-at-part',
-                        constraints = Constraints(numConstraints=['look-at-part']))
-    ps.createTransformationConstraint('placement/complement', '','part/base_link',
-                                    [0,0,0,0, 0, 0, 1],
-                                    [True, True, True, True, True, True,])
-    ps.setConstantRightHandSide('placement/complement', False)
-    graph.addConstraints(edge='go-look-at-part',
-                        constraints = Constraints(numConstraints=\
-                                                ['placement/complement']))
-    graph.addConstraints(edge='stop-looking-at-part',
-                        constraints = Constraints(numConstraints=\
-                                                ['placement/complement']))
-  #  sm = SecurityMargins(ps, factory, ["ur3e", "part"])
- #   sm.setSecurityMarginBetween("ur3e", "part", 0.015)
- #   sm.setSecurityMarginBetween("ur3e", "ur3e", 0)
- #   sm.defaultMargin = 0.01
- #   sm.apply()
-    graph.initialize()
-    # Set weights of levelset edges to 0
-    for e in graph.edges.keys():
-        if e[-3:] == "_ls" and graph.getWeight(e) != -1:
-            graph.setWeight(e, 0)
-    return factory, graph
-
-
-=======
->>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
 # Create locked joint for grippers
 def createGripperLockedJoints (ps, q):
     left_gripper_lock = list()
@@ -235,10 +142,10 @@ def createGripperLockedJoints (ps, q):
     for n in ps.robot.jointNames:
         s = ps.robot.getJointConfigSize(n)
         r = ps.robot.rankInConfiguration[n]
-        if n.startswith("ur3e/robotiq_85_right"):
+        if n.startswith("ur3/robotiq_85_right"):
             ps.createLockedJoint(n, n, q[r : r + s])
             right_gripper_lock.append(n)
-        elif n.startswith("ur3e/robotiq_85_left"):
+        elif n.startswith("ur3/robotiq_85_left"):
             ps.createLockedJoint(n, n, q[r : r + s])
             left_gripper_lock.append(n)
     return left_gripper_lock, right_gripper_lock        

@@ -60,11 +60,7 @@ v(q_init)
 
 #Set Goal
 q_goal = q_init[::]
-<<<<<<< HEAD
-q_goal[17] = -0.1
-=======
 q_goal[6] = -0.1
->>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
 ps.addGoalConfig(q_goal) #grasp
 
 pp = PathPlayer(v)

@@ -78,7 +78,7 @@ def wd(o):
     from hpp.corbaserver import wrap_delete
     return wrap_delete(o, client.basic._tools)
 
-robot = Robot("robot", "ur3e", rootJointType="anchor", client=client)
+robot = Robot("robot", "ur3", rootJointType="anchor", client=client)
 crobot = wd(wd(robot.hppcorba.problem.getProblem()).robot())
 
 print("Robot loaded")
@@ -89,7 +89,7 @@ ps.addPathOptimizer("EnforceTransitionSemantic")
 ps.addPathOptimizer("SimpleTimeParameterization")
 
 ps.setParameter('SimpleTimeParameterization/order', 2)
-ps.setParameter('SimpleTimeParameterization/maxAcceleration', .5)
+ps.setParameter('SimpleTimeParameterization/maxAcceleration', .2)
 ps.setParameter('SimpleTimeParameterization/safety', 0.95)
 
 # Add path projector to avoid discontinuities
@@ -100,12 +100,12 @@ vf = ViewerFactory(ps)
 ## Shrink joint bounds of UR-5
 #
 jointBounds = dict()
-jointBounds["limited"] = [('ur3e/shoulder_pan_joint', [-pi, pi]),
-  ('ur3e/shoulder_lift_joint', [-pi, pi]),
-  ('ur3e/elbow_joint', [-3.1, 3.1]),
-  ('ur3e/wrist_1_joint', [-3.9, 3.2]),
-  ('ur3e/wrist_2_joint', [-4.8, 3.2]),
-  ('ur3e/wrist_3_joint', [-3.2, 3.2])]
+jointBounds["limited"] = [('ur3/shoulder_pan_joint', [-pi, pi]),
+  ('ur3/shoulder_lift_joint', [-pi, pi]),
+  ('ur3/elbow_joint', [-3.1, 3.1]),
+  ('ur3/wrist_1_joint', [-3.9, 3.2]),
+  ('ur3/wrist_2_joint', [-4.8, 3.2]),
+  ('ur3/wrist_3_joint', [-3.2, 3.2])]
 
 setRobotJointBounds("limited")
 
@@ -128,11 +128,11 @@ vf.loadRobotModel (Part, "part")
 #Part joint
 robot.setJointBounds('part/root_joint', [-0.388, 0.372,
                                           -0.795, 0.135, 
-                                           1.008, 1.7392])
+                                           1.00, 1.7392])
 print(f"{Part.__class__.__name__} loaded")
 
 robot.client.manipulation.robot.insertRobotSRDFModel\
-    ("ur3e", "package://agimus_demos/srdf/ur3_robot.srdf")
+    ("ur3", "package://agimus_demos/srdf/ur3_robot.srdf")
 
 
 def norm(quaternion):
@@ -151,14 +151,17 @@ q0[:6] = [0, -pi/2, 0.89*pi,-pi/2, -pi, 0.5]
 
 ## Define initial configuration
 q0 = robot.getCurrentConfig()
-q_calib = [-0.11230117479433233, -0.570446793233053, -0.6386836210833948, -0.47266132036318, -1.5677784124957483, -0.1450431982623499,  0, 0, 0, 0, 0, 0, 0]
+q_calib = [-0.17332965532411748, -0.5632131735431116, -0.6789363066302698, -0.428781811391012, -1.561974827443258, -0.20535022417177373,0, 0, 0, 0, 0, 0, 0]
+q_calib_2 = [-2.783581797276632, -2.3941038290606897, 0.40172576904296875, -2.598349396382467, 1.5528945922851562, 0.37268954515457153, 0, 0, 0, 0, 0, 0, 0]
+
 #q_calib_2 = [-0.0314868132220667, -0.3098681608783167, -0.7921517531024378, -0.4463098684894007, -1.567646328602926, -0.0652702490435999,  0, 0, 0, 0, 0, 0, 0]
 
 
 r = robot.rankInConfiguration['part/root_joint']
 q0[r:r+7] = partPose
 q_calib[r:r+7] = partPose
-gripper = 'ur3e/gripper'
+q_calib_2[r:r+7] = partPose
+gripper = 'ur3/gripper'
 
 
 ## Create specific constraint for a given handle
@@ -188,9 +191,10 @@ def createConstraintGraph():
     graph = ConstraintGraph(robot, 'graph2')
     factory = ConstraintGraphFactory(graph)
     #Set gripper
-    factory.setGrippers(["ur3e/gripper",])
+    factory.setGrippers(["ur3/gripper",])
     #Set kapla
-    factory.setObjects(["part",], [part_handles], [["ur3e/top",],])
+    factory.setObjects(["part",], [part_handles], [["ur3/top",],])
+    factory.setPreplacementDistance("part", 0.01)
     factory.generate()
     for handle in all_handles:
         loopEdge = 'Loop | 0-{}'.format(factory.handles.index(handle))
@@ -198,7 +202,7 @@ def createConstraintGraph():
             (numConstraints=['part/root_joint']))
 
     n = norm([-0.576, -0.002, 0.025, 0.817])
-    ps.createTransformationConstraint('look-at-part', 'part/base_link', 'ur3e/wrist_3_link',
+    ps.createTransformationConstraint('look-at-part', 'part/base_link', 'ur3/wrist_3_link',
                                     [-0.126, -0.611, 1.209, -0.576/n, -0.002/n, 0.025/n, 0.817/n],
                                     [True, True, True, True, True, True,])
     graph.createNode(['look-at-part'])
@@ -217,10 +221,10 @@ def createConstraintGraph():
     graph.addConstraints(edge='stop-looking-at-part',
                         constraints = Constraints(numConstraints=\
                                                 ['placement/complement']))
-    sm = SecurityMargins(ps, factory, ["ur3e", "part"])
+    sm = SecurityMargins(ps, factory, ["ur3", "part"])
     sm.setSecurityMarginBetween("universe", "part", float("-inf"))
-    sm.setSecurityMarginBetween("ur3e", "part", 0.015)
-    sm.setSecurityMarginBetween("ur3e", "ur3e", 0)
+    sm.setSecurityMarginBetween("ur3", "part", 0.015)
+    sm.setSecurityMarginBetween("ur3", "ur3", 0)
     sm.defaultMargin = 0.01
     sm.apply()
 
@@ -265,7 +269,7 @@ if useFOV:
                         fov = np.radians((69.4, 52)),
                         geoms = [],
                         optical_frame = "camera_color_optical_frame",
-                        group_camera_link = "robot/ur3e/ref_camera_link",
+                        group_camera_link = "robot/ur3/ref_camera_link",
                         camera_link = "ref_camera_link",
                         modelConfig = configHPPtoFOV)
     robot.setCurrentConfig(q_init)
@@ -315,7 +319,7 @@ v(q_init)
 from calibration import Calibration, checkData
 
 calibration = Calibration(ps, graph, factory)
-calibration.robot_name = "ur3e"
+calibration.robot_name = "ur3"
 calibration.camera_frame = 'camera_color_optical_frame'
 calibration.chessboardCenter = (0, 0, 0)
 calibration.addStateToConstraintGraph()
@@ -337,13 +341,13 @@ from createConstraintGraph import test_edge, test_node
 """
 while(i<1):
     i +=1
-    res, q1, err = test_edge('ur3e/gripper > part/handle_10 | f', q_init, graph, robot)
+    res, q1, err = test_edge('ur3/gripper > part/handle_10 | f', q_init, graph, robot)
     p = 1
     v(q1)
     if not res: continue
     res, q2, err = test_edge('Loop | 0-0', q1, graph, robot)
     if not res: continue
-    res, q3, err = test_edge('ur3e/gripper < part/handle_10 | 0-0', q2, graph, robot)
+    res, q3, err = test_edge('ur3/gripper < part/handle_10 | 0-0', q2, graph, robot)
     print(res, err)
  """   
 
@@ -356,6 +360,7 @@ def executeholes(l, q_init=q_init):
         
 
 
-
-
-
+"""
+q_calib[6:] = q_init[6:]
+q_calib_2[6:] = q_init[6:]
+"""

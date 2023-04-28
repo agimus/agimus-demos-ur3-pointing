@@ -82,9 +82,11 @@ class GripperControl(object):
     def callback(self, msg):
 
         if msg.data: #Close
-            self.cmd.rPR = 250
+            self.cmd.rPR = 200
+            self.cmd.rSP = 30
         else: #Open
-            self.cmd.rPR = 0
+            self.cmd.rPR = 180
+            self.cmd.rSP = 30
         self.pub.publish(self.cmd)
         rospy.sleep(0.1)
         

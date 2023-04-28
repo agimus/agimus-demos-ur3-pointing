@@ -27,39 +27,20 @@
 # Install launch files in launch directory
 INSTALL_DEMO_LAUNCH_FILES(ur3 pointing
   LAUNCHFILES
-<<<<<<< HEAD
-  demo.launch
-  estimation.launch
-  estimation_realsense.launch
-  load_ur.launch
-  load_ur3e.launch
-  simulation.launch
-  ur3_upload.launch
-  world_setup.launch
-=======
   launch/demo.launch
   launch/demo_calib.launch
   launch/estimation.launch
   launch/estimation_realsense.launch
   launch/load_ur.launch
-  launch/load_ur3e.launch
+  launch/load_ur3.launch
   launch/simulation.launch
   launch/ur3_upload.launch
   launch/world_setup.launch
->>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
   )
 
 INSTALL(FILES
   supervisor.py
   supervisor_gripper.py
-<<<<<<< HEAD
-  demo-kapla.yaml
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing
-  )
-
-INSTALL(FILES
-  urdf/kapla.urdf
-=======
   yaml/demo-kapla.yaml
   yaml/demo-april-tag-plank.yaml
   yaml/demo-plaque-ur3.yaml
@@ -75,7 +56,6 @@ INSTALL(FILES
   urdf/kapla.urdf
   urdf/april-tag-plank.urdf
   urdf/plaque-ur3.urdf
->>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
   urdf/robot.urdf.xacro
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/urdf
   )
@@ -83,22 +63,13 @@ INSTALL(FILES
   
 INSTALL(FILES
   srdf/kapla.srdf
-<<<<<<< HEAD
-=======
   srdf/april-tag-plank.srdf
   srdf/plaque-ur3.srdf
   srdf/ur3_robot.srdf
->>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/srdf
   )
 
 INSTALL(FILES
-<<<<<<< HEAD
-  meshes/IMC.stl
-  meshes/gripper_2F85_closed.stl
-  meshes/gripper_2f85_opened.stl
-  meshes/robotiq_85_coupler.stl
-=======
   srdf/ur3_robot.srdf
   srdf/plaque-ur3.srdf
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/srdf
@@ -109,7 +80,6 @@ INSTALL(FILES
   meshes/gripper_2f85_opened.stl
   meshes/robotiq_85_coupler.stl
   meshes/ur3_d435_mount.stl
->>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/meshes
   )
   

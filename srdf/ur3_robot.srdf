@@ -1,6 +1,6 @@
-<robot name="ur3e">
+<robot name="ur3">
   <gripper name="gripper" clearance="0.08">
-    <position xyz="0 0 0.163" rpy="0 -1.57079 -1.57079"/>
+    <position xyz="0 0 0.165" rpy="0 -1.57079 -1.57079"/>
     <link name="ur3_d435_mount_link"/>
   </gripper>
 

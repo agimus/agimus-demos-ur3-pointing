@@ -92,7 +92,7 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        ur3e_tool_link:
+        ur3_tool_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -134,12 +134,12 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        ur3e_d435_mount_link:
+        ur3_d435_mount_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        ur3e_tool_link:
+        ur3_tool_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -439,7 +439,7 @@ Visualization Manager:
           Value: false
         collision_cylinder:
           Value: false
-        ur3e_tool_link:
+        ur3_tool_link:
           Value: false
         ee_link:
           Value: false
@@ -547,9 +547,9 @@ Visualization Manager:
           Value: false
         upper_arm_link:
           Value: false
-        ur3e_d435_mount_link:
+        ur3_d435_mount_link:
           Value: false
-        ur3e_tool_link:
+        ur3_tool_link:
           Value: false
         world:
           Value: false
@@ -586,7 +586,7 @@ Visualization Manager:
                             flange:
                               tool0:
                                 {}
-                            ur3e_d435_mount_link:
+                            ur3_d435_mount_link:
                               camera_bottom_screw_frame:
                                 camera_link:
                                   camera_aligned_depth_to_color_frame:
@@ -682,7 +682,7 @@ Visualization Manager:
                                   camera_depth_frame:
                                     camera_depth_optical_frame:
                                       {}
-                              ur3e_tool_link:
+                              ur3_tool_link:
                                   {}
       Update Interval: 0
       Value: true

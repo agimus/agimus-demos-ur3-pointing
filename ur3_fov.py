@@ -53,7 +53,7 @@ class RobotFOV:
             fov = np.radians((69.4, 52)),
             geoms = [],
             optical_frame = "camera_color_optical_frame",
-            group_camera_link = "robot/ur3e/camera_link",
+            group_camera_link = "robot/ur3/camera_link",
             camera_link = "camera_link",
             modelConfig = None
             ):

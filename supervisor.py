@@ -35,12 +35,6 @@ from dynamic_graph.ros.ros_publish import RosPublish
 
 Action.maxControlSqrNorm = 20
 
-<<<<<<< HEAD
-# Action to be performed at start of pre-action of transition
-# "ur3e/gripper > part/handle_{} | f_12"
-class ObjectLocalization(object):
-    timeout = 5
-=======
 class CloseGripper(object):
     timeout = 5
     def __init__(self, sotrobot):
@@ -62,7 +56,7 @@ class CloseGripper(object):
             else:
                 self.gripperClosePublisher.signal('trigger').recompute(t)
                 time.sleep(ts)
-                time.sleep(3.)
+                time.sleep(5.)
                 return True, ""      
 class OpenGripper(object):
     timeout = 5
@@ -85,13 +79,12 @@ class OpenGripper(object):
             else:
                 self.gripperOpenPublisher.signal('trigger').recompute(t)
                 time.sleep(ts)
-                time.sleep(3.)
+                time.sleep(5.)
                 return True, ""
 # Action to be performed at start of pre-action of transition
 # "ur10e/gripper > part/handle_{} | f_12"
 class ObjectLocalization(object):
     timeout = 20
->>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
     def __init__(self, sotrobot, factory, gripper, handle):
         self.sotrobot = sotrobot
         self.objectLocalization = factory.tasks.getGrasp(gripper, handle)\
@@ -209,11 +202,6 @@ def makeSupervisorWithFactory(robot):
         #        append(ol)
 
         id = factory.handles.index(h)
-<<<<<<< HEAD
-        transitionName_21 = '{} < {} | 0-{}_21'.format(g, h, id)
-        supervisor.preActions[transitionName_21].preActions.append(wait)
-    localizeObjectOnLoopTransition(supervisor, factory.handles)
-=======
         
     
         transitionName_21 = '{} < {} | 0-{}_21'.format(g, h, id)
@@ -227,7 +215,7 @@ def makeSupervisorWithFactory(robot):
     for i in range(12, 18):
         transitionName_12 = '{} < part/handle_{} | 0-{}_21'.format(g, i, i)
         supervisor.actions[transitionName_12].preActions.append(closeGripper)
-        #supervisor.actions['ur3e/gripper < part/handle_18 | 0-18_21'].preActions
+        #supervisor.actions['ur3/gripper < part/handle_18 | 0-18_21'].preActions
     #Release 18 to 23
     for i in range(18, 24):
         transitionName_12 = '{} < part/handle_{} | 0-{}_21'.format(g, i, i)
@@ -235,16 +223,19 @@ def makeSupervisorWithFactory(robot):
     """
     #Grasp nuts
     for i in range(36, 39):  
-        transitionName_12 = '{} < part/handle_{} | 0-{}_21'.format(g, i, i)
-        supervisor.actions[transitionName_12].preActions.append(closeGripper)
-        
+        #open gripper during pregrasp if it was previously closed
+        transitionName_12 = '{} > part/handle_{} | f_12'.format(g, i)
+        supervisor.actions[transitionName_12].preActions.append(openGripper)
+        transitionName_21 = '{} < part/handle_{} | 0-{}_21'.format(g, i, i)
+        supervisor.actions[transitionName_21].preActions.append(closeGripper)
     #Release on screws    
     for i in range(24, 36):
-        transitionName_12 = '{} < part/handle_{} | 0-{}_21'.format(g, i, i)
-        supervisor.actions[transitionName_12].preActions.append(openGripper)
-
+        #close gripper during pregrasp if it was previously oppened
+        transitionName_12 = '{} > part/handle_{} | f_12'.format(g, i)
+        supervisor.actions[transitionName_12].preActions.append(closeGripper)
+        transitionName_21 = '{} < part/handle_{} | 0-{}_21'.format(g, i, i)
+        supervisor.actions[transitionName_21].preActions.append(openGripper)
     
->>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
     return factory, supervisor
 
 

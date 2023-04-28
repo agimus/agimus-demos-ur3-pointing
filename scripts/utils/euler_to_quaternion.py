@@ -14,11 +14,7 @@ def  EulerToQuaternion(roll, pitch, yaw): # roll (x), pitch (Y), yaw (z)
     qy = cr * sp * cy + sr * cp * sy
     qz = cr * cp * sy - sr * sp * cy
 
-<<<<<<< HEAD
-    return qw,qx,qy,qz
-=======
     return qx,qy,qz,qw
->>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
 
 
 def QuaterniontoEuler(qx, qy, qz, qw):

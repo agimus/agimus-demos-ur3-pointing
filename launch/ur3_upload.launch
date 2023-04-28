@@ -14,7 +14,7 @@
         args="pub /calibrated std_msgs/Bool true" />
 
   <!-- joint_state_controller -->
-  <rosparam file="$(find ur_gazebo)/config/ur3e_controllers.yaml" command="load"/>
+  <rosparam file="$(find ur_gazebo)/config/ur3_controllers.yaml" command="load"/>
   <node name="joint_state_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn joint_state_controller" respawn="false" output="screen"/>
 
   <!-- Publish pose of end-effector in topic /pose -->

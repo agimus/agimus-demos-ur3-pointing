@@ -78,7 +78,7 @@ def wd(o):
     from hpp.corbaserver import wrap_delete
     return wrap_delete(o, client.basic._tools)
 
-robot = Robot("robot", "ur3e", rootJointType="anchor", client=client)
+robot = Robot("robot", "ur3", rootJointType="anchor", client=client)
 crobot = wd(wd(robot.hppcorba.problem.getProblem()).robot())
 
 print("Robot loaded")
@@ -91,7 +91,7 @@ ps.addPathOptimizer("SimpleTimeParameterization")
 # ps.setParameter('ConfigurationShooter/Gaussian/center', 12*[0.] + [1.])
 # ps.setParameter('ConfigurationShooter/Gaussian/standardDeviation', 0.25)
 ps.setParameter('SimpleTimeParameterization/order', 2)
-ps.setParameter('SimpleTimeParameterization/maxAcceleration', .5)
+ps.setParameter('SimpleTimeParameterization/maxAcceleration', .1)
 ps.setParameter('SimpleTimeParameterization/safety', 0.95)
 
 # Add path projector to avoid discontinuities
@@ -105,19 +105,19 @@ jointBounds = dict()
 jointBounds["default"] = [ (jn, robot.getJointBounds(jn)) \
                            if not jn.startswith('ur3/') else
                            (jn, [-pi, pi]) for jn in robot.jointNames]
-jointBounds["limited"] = [('ur3e/shoulder_pan_joint', [-pi, pi]),
-  ('ur3e/shoulder_lift_joint', [-pi, pi]),
-  ('ur3e/elbow_joint', [-3.1, 3.1]),
-  ('ur3e/wrist_1_joint', [-3.2, 3.2]),
-  ('ur3e/wrist_2_joint', [-3.2, 3.2]),
-  ('ur3e/wrist_3_joint', [-3.2, 3.2])]
+jointBounds["limited"] = [('ur3/shoulder_pan_joint', [-3.9, pi]),
+  ('ur3/shoulder_lift_joint', [-3.9, pi]),
+  ('ur3/elbow_joint', [-3.1, 3.1]),
+  ('ur3/wrist_1_joint', [-3.2, 3.2]),
+  ('ur3/wrist_2_joint', [-3.2, 3.2]),
+  ('ur3/wrist_3_joint', [-3.2, 3.2])]
 # Bounds to generate calibration configurations
-jointBounds["calibration"] = [('ur3e/shoulder_pan_joint', [-2.5, 2.5]),
-  ('ur3e/shoulder_lift_joint', [-2.5, 2.5]),
-  ('ur3e/elbow_joint', [-2.5, 2.5]),
-  ('ur3e/wrist_1_joint', [-2.5, 2.5]),
-  ('ur3e/wrist_2_joint', [-2.5, 2.5]),
-  ('ur3e/wrist_3_joint', [-2.5, 2.5])]
+jointBounds["calibration"] = [('ur3/shoulder_pan_joint', [-2.5, 2.5]),
+  ('ur3/shoulder_lift_joint', [-2.5, 2.5]),
+  ('ur3/elbow_joint', [-2.5, 2.5]),
+  ('ur3/wrist_1_joint', [-2.5, 2.5]),
+  ('ur3/wrist_2_joint', [-2.5, 2.5]),
+  ('ur3/wrist_3_joint', [-2.5, 2.5])]
 setRobotJointBounds("limited")
 ## Remove some collision pairs
 #
@@ -139,18 +139,24 @@ Part = class_()
 vf.loadRobotModel (Part, "part")
 
 #Kapla joint
-robot.setJointBounds('part/root_joint', [0.119, 0.119,
-                                          -0.371, -0.371, 
-                                           1.01, 1.01])
+robot.setJointBounds('part/root_joint',  [-0.388, 0.372,
+                                          -0.795, 0.135, 
+                                           1, 1.7392])
 print(f"{Part.__class__.__name__} loaded")
 
 robot.client.manipulation.robot.insertRobotSRDFModel\
-    ("ur3e", "package://agimus_demos/srdf/ur3_robot.srdf")
+    ("ur3", "package://agimus_demos/srdf/ur3_robot.srdf")
 
 # VISUAL(modification pour voir le visual servoing sur Gazebo)
 # JESSY 07/12 change partPose[0]: 1.4 -> 1.6
-partPose =  [0.119, -0.371, 1.01, 0.0, 0.0, 0.0, 1.]
+    
+def norm(quaternion):
+    return sqrt(sum([e*e for e in quaternion]))
 
+
+n = norm([0, 0, 0.7071068, 0.7071068])
+#partPose =  [0.044, -0.2785, 1.001, 0.0, 0.0,  0.7071068/n, 0.7071068/n]
+partPose =  [0.044, -0.2785, 1.001, 0,0,0,1]
 ## Define initial configuration
 q0 = robot.getCurrentConfig()
 # set the joint match with real robot
@@ -158,20 +164,21 @@ q0[:6] = [0, -pi/2, 0.89*pi,-pi/2, -pi, 0.5]
 
 ## Define initial configuration
 q0 = robot.getCurrentConfig()
-q_calib = [0.07205140590667725, -0.4533942381488245, -0.6467822233783167, -0.5376704374896448, -1.5575411955462855, 0.037997107952833176, 0.119, -0.371, 1.01, 0, 0, 0, 1]
+q_calib = [0.07205140590667725, -0.4533942381488245, -0.6467822233783167, -0.5376704374896448, -1.5575411955462855, 0.037997107952833176, 0.119, -0.371, 1.001, 0, 0, 0, 1]
 
-q_calib_2 = [-0.0314868132220667, -0.3098681608783167, -0.7921517531024378, -0.4463098684894007, -1.567646328602926, -0.0652702490435999,  0.119, -0.371, 1.01, 0, 0, 0, 1]
+q_calib_2 = [-0.08119804063905889, -0.41484290758241826, -0.7924998442279261, -0.3500474135028284, -1.6260665098773401, -0.08863956132997686, 0.044, -0.2785, 1.001, 0.0, 0.0, 0.7071067811865476, 0.7071067811865476]
 
 
 r = robot.rankInConfiguration['part/root_joint']
 q0[r:r+7] = partPose
 q_calib[r:r+7] = partPose
+q_calib_2[r:r+7] = partPose
 
 
 def norm(quaternion):
     return sqrt(sum([e*e for e in quaternion]))
 
-gripper = 'ur3e/GRIPPER'
+gripper = 'ur3/gripper'
 ## Create specific constraint for a given handle
 #  Rotation is free along x axis.
 #  Note that locked part should be added to loop edge.
@@ -197,7 +204,7 @@ def createConstraintGraph():
 
     graph = ConstraintGraph(robot, 'graph2')
     factory = ConstraintGraphFactory(graph)
-    factory.setGrippers(["ur3e/GRIPPER",])
+    factory.setGrippers(["ur3/gripper",])
     factory.setObjects(["part",], [part_handles], [[]])
     factory.generate()
     for handle in all_handles:
@@ -206,7 +213,7 @@ def createConstraintGraph():
             (numConstraints=['part/root_joint']))
 
     n = norm([-0.576, -0.002, 0.025, 0.817])
-    ps.createTransformationConstraint('look-at-part', 'part/base_link', 'ur3e/wrist_3_link',
+    ps.createTransformationConstraint('look-at-part', 'part/base_link', 'ur3/wrist_3_link',
                                     [-0.126, -0.611, 1.209, -0.576/n, -0.002/n, 0.025/n, 0.817/n],
                                     [True, True, True, True, True, True,])
     graph.createNode(['look-at-part'])
@@ -225,9 +232,9 @@ def createConstraintGraph():
     graph.addConstraints(edge='stop-looking-at-part',
                         constraints = Constraints(numConstraints=\
                                                 ['placement/complement']))
-    sm = SecurityMargins(ps, factory, ["ur3e", "part"])
-    sm.setSecurityMarginBetween("ur3e", "part", 0.015)
-    sm.setSecurityMarginBetween("ur3e", "ur3e", 0)
+    sm = SecurityMargins(ps, factory, ["ur3", "part"])
+    sm.setSecurityMarginBetween("ur3", "part", 0.015)
+    sm.setSecurityMarginBetween("ur3", "ur3", 0)
     sm.defaultMargin = 0.01
     sm.apply()
     graph.initialize()
@@ -269,7 +276,7 @@ if useFOV:
                         fov = np.radians((69.4, 52)),
                         geoms = [],
                         optical_frame = "camera_color_optical_frame",
-                        group_camera_link = "robot/ur3e/ref_camera_link",
+                        group_camera_link = "robot/ur3/ref_camera_link",
                         camera_link = "ref_camera_link",
                         modelConfig = configHPPtoFOV)
     robot.setCurrentConfig(q_init)
@@ -320,7 +327,7 @@ v(q_init)
 from calibration import Calibration, checkData
 
 calibration = Calibration(ps, graph, factory)
-calibration.robot_name = "ur3e"
+calibration.robot_name = "ur3"
 calibration.camera_frame = 'camera_color_optical_frame'
 calibration.chessboardCenter = (0, 0, 0)
 calibration.addStateToConstraintGraph()

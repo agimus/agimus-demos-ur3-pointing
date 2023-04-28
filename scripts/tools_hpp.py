@@ -49,7 +49,7 @@ def concatenatePaths(paths):
         p.appendPath(q)
     return p
 
-tool_gripper = 'ur3e/gripper'
+tool_gripper = 'ur3/gripper'
 rosNodeStarted = False
 
 def initRosNode():
@@ -77,11 +77,7 @@ class PathGenerator(object):
         self.cgraph = ps.hppcorba.problem.getProblem().getConstraintGraph()
         # create Planner to solve path planning problems on manifolds
         self.inStatePlanner = InStatePlanner(ps, graph)
-<<<<<<< HEAD
-        self.inStatePlanner.maxIterPathPlanning = 100 #TODO ?
-=======
         self.inStatePlanner.maxIterPathPlanning = 1000 #TODO ?
->>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
         self.inStatePlanner.timeOutPathPlanning = 15
         self.configs = {}
         self.isClogged = lambda x : False
@@ -122,7 +118,7 @@ class PathGenerator(object):
             self.pcl.removeObjectPlan()
         print(f"Getting point cloud ... (timeout is {timeout})")
         result = self.pcl.buildPointCloud('part/base_link', '/camera/depth/color/points',
-                        'ur3e/camera_depth_optical_frame', res,
+                        'ur3/camera_depth_optical_frame', res,
                         qi, timeout, new)
         if result:
             self.graph.initialize()
@@ -151,7 +147,7 @@ class PathGenerator(object):
     # (useful if the robot fails in a grasp position)
     def createBackwardConstraint(self):
         self.ps.client.basic.problem.resetConstraints()
-        self.ps.client.basic.problem.createTransformationR3xSO3Constraint('behind-failure', '', 'ur3e/wrist_3_link',
+        self.ps.client.basic.problem.createTransformationR3xSO3Constraint('behind-failure', '', 'ur3/wrist_3_link',
                                         [0, 0, 0, 0, 0, 0, 1], [0, 0, 0, 0, 0, 0, 1],
                                         [True, True, True, True, True, True,])
         self.ps.setConstantRightHandSide('behind-failure', False)
@@ -174,7 +170,7 @@ class PathGenerator(object):
         self.ps.addNumericalConstraints('config-projector', ['part-fixed'])
         self.ps.client.basic.problem.createTransformationR3xSO3Constraint(
                             'look-at-hole-'+str(hole_id),
-                            'ur3e/ref_camera_link',
+                            'ur3/ref_camera_link',
                             'part/hole_' + str(hole_id).zfill(2) + '_link',
                             [distance, 0, 0, 0.5, -0.5, -0.5, 0.5], [0, 0, 0, 0, 0, 0, 1],
                             [True, True, True, True, True, True,])
@@ -397,30 +393,19 @@ class PathGenerator(object):
         return self.planTo(self.configs[name])
 
     def isHoleDoable(self, hole_id, qinit=None):
-<<<<<<< HEAD
-        if hole_id in [17,20]:
-            return False
-=======
         #if hole_id in [17,20]:
         #    return False
->>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
         if self.graphValidation is None:
             raise RuntimeError("You should validate the graph first")
-        coll = self.graphValidation.getCollisionsForNode("ur3e/gripper grasps part/handle_"+str(hole_id))
+        coll = self.graphValidation.getCollisionsForNode("ur3/gripper grasps part/handle_"+str(hole_id))
         if len(coll) == 0:
             qinit = self.checkQInit(qinit)
             handle = 'part/handle_'+str(hole_id).zfill(2)
             res, qpg, qg = self.generateValidConfigForHandle(handle, qinit=qinit,
-<<<<<<< HEAD
-                    qguesses = [qinit], NrandomConfig=100)
-            if not res or (qg is not None and not self.robot.isConfigValid(qg)[0]):
-                print("Cannot generate valid grasp config")
-=======
                     qguesses = [qinit], NrandomConfig=1000)
             if not res or (qg is not None and not self.robot.isConfigValid(qg)[0]):
                 print("Cannot generate valid grasp config")
                 print(res)
->>>>>>> e1ef91ccdd252f7603bcc3c28882b41d48d39d22
                 return False
             return True
         else:
@@ -461,7 +446,7 @@ class PathGenerator(object):
     def planBackwardsAfterFailure(self, qinit=None, distance=0.1):
         qinit = self.checkQInit(qinit)
         # Get current transform of wrist
-        t = self.robot.getCurrentTransformation('ur3e/wrist_3_joint')
+        t = self.robot.getCurrentTransformation('ur3/wrist_3_joint')
         trans = [t[i][3] for i in range(3)]
         rot_matrix = [t[i][:3] for i in range(3)]
         quat = list(R.from_matrix(rot_matrix).as_quat())
@@ -609,7 +594,7 @@ class PathGenerator(object):
         if not res:
             if 'Joint part/root_joint' in msg and 'value out of range' in msg:
                 return True
-            if 'Collision between object ur3e/support_link' in msg and 'part/' in msg:
+            if 'Collision between object ur3/support_link' in msg and 'part/' in msg:
                 return True
         return False
 

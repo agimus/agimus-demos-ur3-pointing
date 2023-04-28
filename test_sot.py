@@ -19,7 +19,7 @@ x = SE3(R, np.array([OFFSET_X,OFFSET_Y,OFFSET_Z]))
 # ol.trigger(robot.device.control.time)
 
 def getSignal(handle_id):
-    f = FeaturePose('pregrasp___ur3e/gripper___part/handle_' + str(handle_id).zfill(2) + '_feature')
+    f = FeaturePose('pregrasp___ur3/gripper___part/handle_' + str(handle_id).zfill(2) + '_feature')
     s = f.signal("jaMfa")
     return s
 
@@ -31,4 +31,4 @@ def changejaMfa(handle_id, x):
 for i in range(44):
     changejaMfa(i, x)
 
-# supervisor.sots['Loop | 0-5'] = supervisor.sots['ur3e/gripper > part/handle_05 | f_12']
+# supervisor.sots['Loop | 0-5'] = supervisor.sots['ur3/gripper > part/handle_05 | f_12']
