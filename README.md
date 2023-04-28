@@ -78,7 +78,7 @@ python ../stop-controllers.py
 
 3. in terminal 2:
 ```bash
-roslaunch ./demo.launch simulation:=true
+roslaunch ./demo_vision.launch simulation:=true
 ```
 or on the real robot:
 ```bash

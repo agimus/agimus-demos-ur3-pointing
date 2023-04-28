@@ -2,7 +2,7 @@
 
 0. In terminal 1, run the following command to start realsense with ros, with the option to publish the pointcloud:
 ```bash
-roslaunch realsense2_camera rs_aligned_depth.launch filters:=pointcloud color_fps:=2 depth_fps:=2  enable_infra1:=false enable_infra2:=false initial_reset:=true
+roslaunch realsense2_camera rs_aligned_depth.launch filters:=pointcloud
 ```
 
 Check that the package ```react_inria``` is installed and go to the folder ```react_inria/launch```.
