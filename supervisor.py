@@ -35,85 +35,6 @@ from dynamic_graph.ros.ros_publish import RosPublish
 
 Action.maxControlSqrNorm = 20
 
-class CloseGripper(object):
-    timeout = 5
-    def __init__(self, sotrobot):
-        self.sotrobot = sotrobot
-        self.gripperCloseTopic = "/agimus/sot/gripper_status"
-        self.gripperClosePublisher = RosPublish("GripperClose")
-        self.gripperClosePublisher.add('boolean', 'gripperClosePublisher_', self.gripperCloseTopic)
-        self.gripperClosePublisher.signal('gripperClosePublisher_').value = True
-
-    def __call__(self):
-        ts = self.sotrobot.device.getTimeStep()
-        to = int(self.timeout / self.sotrobot.device.getTimeStep())
-        start_it = self.sotrobot.device.control.time
-        while True:
-            t = self.sotrobot.device.control.time
-            if t > start_it + to:
-                print("Failed to grasp")
-                return False, "Failed to grasp"
-            else:
-                self.gripperClosePublisher.signal('trigger').recompute(t)
-                time.sleep(ts)
-                time.sleep(3.)
-                return True, ""      
-class OpenGripper(object):
-    timeout = 5
-    def __init__(self, sotrobot):
-        self.sotrobot = sotrobot
-        self.gripperOpenTopic = "/agimus/sot/gripper_status"
-        self.gripperOpenPublisher = RosPublish("GripperOpen")
-        self.gripperOpenPublisher.add('boolean', 'gripperOpenPublisher_', self.gripperOpenTopic)
-        self.gripperOpenPublisher.signal('gripperOpenPublisher_').value = False
-
-    def __call__(self):
-        ts = self.sotrobot.device.getTimeStep()
-        to = int(self.timeout / self.sotrobot.device.getTimeStep())
-        start_it = self.sotrobot.device.control.time
-        while True:
-            t = self.sotrobot.device.control.time
-            if t > start_it + to:
-                print("Failed to grasp")
-                return False, "Failed to grasp"
-            else:
-                self.gripperOpenPublisher.signal('trigger').recompute(t)
-                time.sleep(ts)
-                time.sleep(3.)
-                return True, ""
-# Action to be performed at start of pre-action of transition
-# "ur3/gripper > part/handle_{} | f_12"
-class ObjectLocalization(object):
-    timeout = 20
-    def __init__(self, sotrobot, factory, gripper, handle):
-        self.sotrobot = sotrobot
-        self.objectLocalization = factory.tasks.getGrasp(gripper, handle)\
-                                  ['pregrasp'].objectLocalization
-        # JESSY 05/12 setVisualServoingMode to False.
-        self.objectLocalization.setVisualServoingMode(False)
-
-        self.handle = handle
-        self.localizationFailedTopic = "/agimus/status/localization_failed"
-        self.localizationFailedPublisher = RosPublish("localizationFailedPublisher")
-        self.localizationFailedPublisher.add('string', 'localizationFailedPublisher-'+handle, self.localizationFailedTopic)
-        self.localizationFailedPublisher.signal('localizationFailedPublisher-'+handle).value = ""
-
-    def __call__(self):
-        ts = self.sotrobot.device.getTimeStep()
-        to = int(self.timeout / self.sotrobot.device.getTimeStep())
-        start_it = self.sotrobot.device.control.time
-        while True:
-            t = self.sotrobot.device.control.time
-            if t > start_it + to:
-                print("Failed to perform object localization")
-                self.localizationFailedPublisher.signal('trigger').recompute(t)
-                return False, "Failed to perform object localization"
-            self.objectLocalization.trigger(t)
-            if self.objectLocalization.done.value:
-                print("Successfully performed object localization")
-                return True, ""
-            time.sleep(ts)
-
 def wait():
     print("Waiting 1 second")
     time.sleep(1)
@@ -180,51 +101,6 @@ def makeSupervisorWithFactory(robot):
     factory.generate()
 
     supervisor.makeInitialSot()
-    g = factory.grippers[0]
-    for h in factory.handles:
-        transitionName_12 = '{} > {} | f_12'.format(g, h)
-        goalName = '{} grasps {}'.format(g, h)
-        # Add visual servoing in post actions of transtion 'g > h | f_12'
-        # visual servoing is deactivated by default at this step to avoid
-        # undesirable effects when grasping an object.
-        supervisor.postActions[transitionName_12][goalName].sot = \
-          supervisor.actions[transitionName_12].sot
-        # Add a pre-action to the pre-action of transition 'g > h | f_12'
-        # in order to perform object localization before starting the
-        # motion.
-        ol = ObjectLocalization(robot, factory, g, h)
-        supervisor.preActions[transitionName_12].preActions.append(ol)
-        # For calibration handles, relocalize in contact
-
-        # VISUAL Commented for visual servoing
-        #if h.find('calibration') != -1:
-        #   supervisor.postActions[transitionName_12][goalName].preActions.\
-        #        append(ol)
-
-        id = factory.handles.index(h)
-        
-    
-        transitionName_21 = '{} < {} | 0-{}_21'.format(g, h, id)
-        supervisor.preActions[transitionName_21].preActions.append(wait)
-    #localizeObjectOnLoopTransition(supervisor, factory.handles)
-    
-    closeGripper = CloseGripper(robot)
-    openGripper = OpenGripper(robot)
-    #Grasp nuts
-    for i in range(92, 95):  
-        #open gripper during pregrasp if it was previously closed
-        transitionName_12 = '{} > part/handle_{} | f_12'.format(g, i)
-        supervisor.actions[transitionName_12].preActions.append(openGripper)
-        transitionName_21 = '{} < part/handle_{} | 0-{}_21'.format(g, i, i)
-        supervisor.actions[transitionName_21].preActions.append(closeGripper)
-    #Release on screws    
-    for i in range(68, 92):
-        #close gripper during pregrasp if it was previously oppened
-        transitionName_12 = '{} > part/handle_{} | f_12'.format(g, i)
-        supervisor.actions[transitionName_12].preActions.append(closeGripper)
-        transitionName_21 = '{} < part/handle_{} | 0-{}_21'.format(g, i, i)
-        supervisor.actions[transitionName_21].preActions.append(openGripper)
-    
     return factory, supervisor
 
 # Use service /agimus/sot/set_base_pose to set initial config

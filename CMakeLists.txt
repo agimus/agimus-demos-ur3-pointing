@@ -27,8 +27,7 @@
 # Install launch files in launch directory
 INSTALL_DEMO_LAUNCH_FILES(ur3 pointing
   LAUNCHFILES
-  launch/demo_vision.launch
-  launch/demo_calib.launch
+  launch/demo.launch
   launch/estimation.launch
   launch/estimation_realsense.launch
   launch/load_ur.launch
@@ -40,6 +39,7 @@ INSTALL_DEMO_LAUNCH_FILES(ur3 pointing
 
 INSTALL(FILES
   supervisor.py
+  supervisor_pickandplace.py
   yaml/demo-april-tag-plank.yaml
   yaml/demo-plaque-ur3.yaml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing

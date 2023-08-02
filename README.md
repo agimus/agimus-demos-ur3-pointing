@@ -79,11 +79,11 @@ python ../stop-controllers.py
 
 3. in terminal 2:
 ```bash
-roslaunch ./demo_vision.launch simulation:=true
+roslaunch ./demo.launch simulation:=true
 ```
 or on the real robot:
 ```bash
-roslaunch ./demo_vision.launch
+roslaunch ./demo.launch
 ```
 On the robot, after the file is run, the robot should have a lock sound of the joint.
 

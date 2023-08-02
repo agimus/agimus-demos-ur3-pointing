@@ -10,13 +10,19 @@ on a horizontal plane in front of the robot.
 Start the demo with the following differences:
 
   - no need to start react_inria node,
-  - roslaunch demo_calib.launch
+  - roslaunch demo.launch part:=april-tag-plank
+```bash
+roslaunch ./demo.launch part:=april-tag-plank
+```
+  - run the script demo_calib.py  
+```bash
+python -i demo_calib.py
+```
 
 Move the robot to the "calib" configuration.
 
 In the terminal where demo_calib.py has been run, copy paste the
 following lines. 
-
 ```python
 from calibration import Calibration, generateDataForFigaroh, checkData
 
@@ -36,9 +42,9 @@ In the same terminal, run
 ```python
 playAllPaths(0)
 ```
+
 The robot should execute the paths and collect the required data at each end
 of path. After the last path has been executed,
-
 ```bash
 mkdir measurements
 ```
