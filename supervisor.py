@@ -56,7 +56,7 @@ class CloseGripper(object):
             else:
                 self.gripperClosePublisher.signal('trigger').recompute(t)
                 time.sleep(ts)
-                time.sleep(5.)
+                time.sleep(3.)
                 return True, ""      
 class OpenGripper(object):
     timeout = 5
@@ -79,10 +79,10 @@ class OpenGripper(object):
             else:
                 self.gripperOpenPublisher.signal('trigger').recompute(t)
                 time.sleep(ts)
-                time.sleep(5.)
+                time.sleep(3.)
                 return True, ""
 # Action to be performed at start of pre-action of transition
-# "ur10e/gripper > part/handle_{} | f_12"
+# "ur3/gripper > part/handle_{} | f_12"
 class ObjectLocalization(object):
     timeout = 20
     def __init__(self, sotrobot, factory, gripper, handle):
@@ -210,26 +210,15 @@ def makeSupervisorWithFactory(robot):
     
     closeGripper = CloseGripper(robot)
     openGripper = OpenGripper(robot)
-    """
-    #Grasp 12 to 17
-    for i in range(12, 18):
-        transitionName_12 = '{} < part/handle_{} | 0-{}_21'.format(g, i, i)
-        supervisor.actions[transitionName_12].preActions.append(closeGripper)
-        #supervisor.actions['ur3/gripper < part/handle_18 | 0-18_21'].preActions
-    #Release 18 to 23
-    for i in range(18, 24):
-        transitionName_12 = '{} < part/handle_{} | 0-{}_21'.format(g, i, i)
-        supervisor.actions[transitionName_12].preActions.append(openGripper)
-    """
     #Grasp nuts
-    for i in range(36, 39):  
+    for i in range(92, 95):  
         #open gripper during pregrasp if it was previously closed
         transitionName_12 = '{} > part/handle_{} | f_12'.format(g, i)
         supervisor.actions[transitionName_12].preActions.append(openGripper)
         transitionName_21 = '{} < part/handle_{} | 0-{}_21'.format(g, i, i)
         supervisor.actions[transitionName_21].preActions.append(closeGripper)
     #Release on screws    
-    for i in range(24, 36):
+    for i in range(68, 92):
         #close gripper during pregrasp if it was previously oppened
         transitionName_12 = '{} > part/handle_{} | f_12'.format(g, i)
         supervisor.actions[transitionName_12].preActions.append(closeGripper)
@@ -237,7 +226,6 @@ def makeSupervisorWithFactory(robot):
         supervisor.actions[transitionName_21].preActions.append(openGripper)
     
     return factory, supervisor
-
 
 # Use service /agimus/sot/set_base_pose to set initial config
 factory, supervisor = makeSupervisorWithFactory(robot)

@@ -27,7 +27,7 @@
 # Install launch files in launch directory
 INSTALL_DEMO_LAUNCH_FILES(ur3 pointing
   LAUNCHFILES
-  launch/demo.launch
+  launch/demo_vision.launch
   launch/demo_calib.launch
   launch/estimation.launch
   launch/estimation_realsense.launch
@@ -40,8 +40,6 @@ INSTALL_DEMO_LAUNCH_FILES(ur3 pointing
 
 INSTALL(FILES
   supervisor.py
-  supervisor_gripper.py
-  yaml/demo-kapla.yaml
   yaml/demo-april-tag-plank.yaml
   yaml/demo-plaque-ur3.yaml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing
@@ -53,16 +51,13 @@ INSTALL(PROGRAMS
     )  
   
 INSTALL(FILES
-  urdf/kapla.urdf
   urdf/april-tag-plank.urdf
   urdf/plaque-ur3.urdf
   urdf/robot.urdf.xacro
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/urdf
   )
    
-  
 INSTALL(FILES
-  srdf/kapla.srdf
   srdf/april-tag-plank.srdf
   srdf/plaque-ur3.srdf
   srdf/ur3_robot.srdf
@@ -80,9 +75,9 @@ INSTALL(FILES
   meshes/gripper_2f85_opened.stl
   meshes/robotiq_85_coupler.stl
   meshes/ur3_d435_mount.stl
+  meshes/plaque.stl
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/meshes
   )
-  
  
 INSTALL(DIRECTORY config DESTINATION
   ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing)

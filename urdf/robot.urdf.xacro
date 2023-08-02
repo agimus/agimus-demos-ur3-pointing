@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro" name="ur3" >
 
-    
   <material name="white02">
     <color rgba="1 1 1 0.2"/>
   </material>
@@ -60,43 +59,42 @@
    <link name="world" />
 
     <link name="support_link">
-      <inertial>
-        <mass value="200"/>
-	<origin xyz="0 0 0.44"/>
-        <inertia ixx="50"  ixy="0"  ixz="0" iyy="50" iyz="0" izz="50" />
-      </inertial>
-      
-      <!-- table -->
-      <visual>
-	<origin xyz="0.0 -0.305 0.5"/>
-        <geometry>
-	        <box size="0.80 1 1"/>
-        </geometry>
-      </visual>
-      <collision>
-        <origin xyz="0.0 -0.305 0.5"/>
-        <geometry>
-	        <box size="0.80 1 1"/>
-        </geometry>
-      </collision>
-      
-      <!-- support -->
-     <visual>
-       <origin xyz="0 0 1.01"/>
-       <geometry>
-	        <box size="0.16 0.16 0.02"/>
-       </geometry>
-     </visual>
-     <collision>
-       <origin xyz="0 0 1.01"/>
-       <geometry>
-	        <box size="0.16 0.16 0.02"/>
-       </geometry>
-     </collision>     
+        <inertial>
+            <mass value="200"/>
+        	<origin xyz="0 0 0.44"/>
+            <inertia ixx="50"  ixy="0"  ixz="0" iyy="50" iyz="0" izz="50" />
+        </inertial>
+          
+        <!-- table -->
+            <visual>
+        	<origin xyz="0.0 -0.305 0.5"/>
+                <geometry>
+        	        <box size="0.80 1 1"/>
+                </geometry>
+              </visual>
+              <collision>
+                <origin xyz="0.0 -0.305 0.5"/>
+                <geometry>
+        	        <box size="0.80 1 1"/>
+                </geometry>
+              </collision>
+          
+         <!-- support -->
+             <visual>
+               <origin xyz="0 0 1.01"/>
+               <geometry>
+        	        <box size="0.16 0.16 0.02"/>
+               </geometry>
+             </visual>
+             <collision>
+               <origin xyz="0 0 1.01"/>
+               <geometry>
+        	        <box size="0.16 0.16 0.02"/>
+               </geometry>
+             </collision>     
     </link>
 
-     <link name="walls">
-            
+     <link name="walls">        
       <!-- behind wall -->
      <visual>
 	<origin xyz="-0.385 -0.305 0.37"/>
@@ -158,11 +156,10 @@
      </collision>
     </link> 
 
-
 <joint name="walls_joint" type="fixed">
      <parent link="support_link" />
      <child link = "walls" />
-      <origin xyz="0.0 0.0 1" rpy="0.0 0.0 0" />
+     <origin xyz="0.0 0.0 1" rpy="0.0 0.0 0" />
    </joint>
 
    <joint name="support_joint" type="fixed">
@@ -171,16 +168,13 @@
      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
    </joint>
   
-   
    <joint name="robot_joint" type="fixed">
      <parent link="support_link" />
      <child link = "base_link" />
       <origin xyz="0.0 0.0 1" rpy="0.0 0.0 -1.5707963" />
-   </joint>
-    
+   </joint> 
        
    <!-- Gripper -->
-   
     <link name="robotiq_85_gripper">
      <visual>
         <geometry>
@@ -227,7 +221,6 @@
     <origin xyz="-0.094 0 0" rpy="${pi/2} 0 ${pi/2}"/>
   </joint> 
    
-
     <!-- TCP frame -->
     <joint name="tcp_joint" type="fixed">
       <origin xyz="0 0 0.116" rpy="0 0 0"/>
@@ -237,7 +230,6 @@
     <link name="tcp"/>
     
     <!-- Camera -->
-    
     <link name="ur3_d435_mount_link">
      <inertial>
        <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
@@ -287,23 +279,8 @@
 
    <xacro:sensor_d435 parent="ref_camera_link" name="camera" use_nominal_extrinsics="true">
      <!-- <origin xyz="0 0.115 0" rpy="0 -1.0472 -1.57079632679"/> -->
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+     <origin xyz="0 0 0" rpy="0 0 0"/>
    </xacro:sensor_d435>
-   
-   
-      <!-- Axes -->
-  
-      <link name="gripper_axe">
-      </link>
-      
-       <joint name="gripper_axe_joint" type="fixed">
-        <origin xyz="0 0 0.16" rpy="${-pi/2} 0 ${-pi/2}"/>
-        <parent link="ur3_d435_mount_link"/>
-        <child link="gripper_axe"/>
-      </joint>
-      
-      
-
-         
+            
 </robot>
 

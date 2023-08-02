@@ -78,7 +78,7 @@ def checkData(robot, v, figaroh_csv_file, q_init):
 
 def computeCameraPose(mMe, eMc, eMc_measured):
     # we wish to compute a new position mMe_new of ref_camera_link in
-    # ur10e_d435_mount_link in such a way that
+    # ur3_d435_mount_link in such a way that
     #  - eMc remains the same (we assume the camera is well calibrated),
     #  - mMc = mMe_new * eMc = mMe * eMc_measured
     # Thus
@@ -87,21 +87,19 @@ def computeCameraPose(mMe, eMc, eMc_measured):
 
 from pinocchio.rpy import rpyToMatrix
 
-# # Current position of ref_camera_link in ur10e_d435_mount_link
+# # Current position of ref_camera_link in ur3d435_mount_link
 mMe = pinocchio.SE3(translation=np.array([0.00033351, 0.11805402, -0.01064025]), rotation=rpyToMatrix(-0.00127120646, -1.00435876, -1.56137241))
-#mMe = pinocchio.SE3(translation=np.array([0.00300477, 0.12627253, -0.02307305]), rotation=rpyToMatrix(0.00817553, -1.07047557, -1.56309642))
-#mMe = pinocchio.SE3(translation=np.array([0.00229191, 0.12761135, -0.02471939]), rotation=rpyToMatrix(-0.00445908, -1.14667902, -1.54573088))
 
 # # Current position of camera_color_optical_frame in ref_camera_link
 eMc = pinocchio.SE3(translation=np.array([0.011, 0.033, 0.013]),quat = eigenpy.Quaternion(np.array([-0.500, 0.500, -0.500, 0.500])))
 
-# # Measured position of camera_optical_frame in ref_camera_link from calibration
-M = np.array([[0.007798099516,  0.07461019658,  0.9971822843,  0.003429233954],
-          [-0.9999695403,  0.0009097568382,  0.007751827297,  0.03224106562],
-          [-0.0003288280436,  -0.99721236,  0.07461501835,  0.009934222181],
+# TO REPLACE - Measured position of camera_optical_frame in ref_camera_link from calibration
+M = np.array([[0.005008904801,  0.06605451476,  0.9978034435,  -0.2890598529],
+          [-0.9999838915,  0.002994836134,  0.004821592568,  0.02670091654],
+          [-0.00266976985,  -0.9978115213,  0.06606845157,  -0.0412619237],
           [0,  0,  0,  1]])
-
 eMc_measured = pinocchio.SE3(M)
+
 # #new position mMe_new of ref_camera_link in ur10e_d435_mount_link
 mMe_new = computeCameraPose(mMe, eMc, eMc_measured)
 xyz = mMe_new.translation

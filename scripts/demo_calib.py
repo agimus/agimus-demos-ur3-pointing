@@ -35,9 +35,6 @@ from hpp.gepetto import PathPlayer
 from hpp.gepetto.manipulation import ViewerFactory
 from tools_hpp import RosInterface, PathGenerator
 
-useFOV = False
-
-
 class AprilTagPlank:
     urdfFilename = "package://agimus_demos/ur3/pointing/urdf/april-tag-plank.urdf"
     srdfFilename = "package://agimus_demos/ur3/pointing/srdf/april-tag-plank.srdf"
@@ -99,7 +96,7 @@ ps.selectPathProjector ("Progressive", .05)
 ps.selectPathValidation("Graph-Progressive", 0.01)
 vf = ViewerFactory(ps)
 
-## Shrink joint bounds of UR-5
+## Shrink joint bounds of UR-3
 #
 jointBounds = dict()
 jointBounds["default"] = [ (jn, robot.getJointBounds(jn)) \
@@ -123,9 +120,6 @@ setRobotJointBounds("limited")
 #
 ur3JointNames = list(filter(lambda j: j.startswith("ur3/"), robot.jointNames))
 ur3LinkNames = [ robot.getLinkNames(j) for j in ur3JointNames ]
-
-## Load P72
-#[1., 0, 0.8,0,0,-sqrt(2)/2,sqrt(2)/2]
 
 # Get class_name str from rosparam
 Part_name = rospy.get_param('/demo/objects/AprilTagPlank/class_name');
@@ -155,7 +149,6 @@ def norm(quaternion):
 
 
 n = norm([0, 0, 0.7071068, 0.7071068])
-#partPose =  [0.044, -0.2785, 1.001, 0.0, 0.0,  0.7071068/n, 0.7071068/n]
 partPose =  [0.044, -0.2785, 1.001, 0,0,0,1]
 ## Define initial configuration
 q0 = robot.getCurrentConfig()
@@ -166,14 +159,9 @@ q0[:6] = [0, -pi/2, 0.89*pi,-pi/2, -pi, 0.5]
 q0 = robot.getCurrentConfig()
 q_calib = [0.07205140590667725, -0.4533942381488245, -0.6467822233783167, -0.5376704374896448, -1.5575411955462855, 0.037997107952833176, 0.119, -0.371, 1.001, 0, 0, 0, 1]
 
-q_calib_2 = [-0.08119804063905889, -0.41484290758241826, -0.7924998442279261, -0.3500474135028284, -1.6260665098773401, -0.08863956132997686, 0.044, -0.2785, 1.001, 0.0, 0.0, 0.7071067811865476, 0.7071067811865476]
-
-
 r = robot.rankInConfiguration['part/root_joint']
 q0[r:r+7] = partPose
 q_calib[r:r+7] = partPose
-q_calib_2[r:r+7] = partPose
-
 
 def norm(quaternion):
     return sqrt(sum([e*e for e in quaternion]))
@@ -256,74 +244,14 @@ except:
 ri = None
 ri = RosInterface(robot)
 q_init = ri.getCurrentConfig(q0)
-# q_init = q0 #robot.getCurrentConfig()
 pg = PathGenerator(ps, graph, ri, v, q_init)
 pg.inStatePlanner.setEdge('Loop | f')
 pg.testGraph()
-NB_holes = 5 * 7
-NB_holes_total = 44
-hidden_holes = [0,2,10,11,12,14,16,24,33]
-holes_to_do = [i for i in range(NB_holes) if i not in hidden_holes]
+
 pg.setIsClogged(None)
 ps.setTimeOutPathPlanning(10)
 
-if useFOV:
-    def configHPPtoFOV(q):
-        return q[:6] + q[-7:]
-
-    from ur3_fov import RobotFOV, RobotFOVGuiCallback, Feature, Features
-    ur3_fov = RobotFOV(urdfString = Robot.urdfString,
-                        fov = np.radians((69.4, 52)),
-                        geoms = [],
-                        optical_frame = "camera_color_optical_frame",
-                        group_camera_link = "robot/ur3/ref_camera_link",
-                        camera_link = "ref_camera_link",
-                        modelConfig = configHPPtoFOV)
-    robot.setCurrentConfig(q_init)
-    # Add Plaque model in the field of view object
-    # to test if the plaque itself obstructs the view to the features
-    oMh, oMd = robot.hppcorba.robot.getJointsPosition(q_init, ["universe", "part/base_link"])
-    fMm = (Transform(oMh).inverse() * Transform(oMd)).toTuple()
-    ur3_fov.appendUrdfModel(PartPlaque.urdfFilename, "universe",
-        fMm, prefix="part/")
-    feature_list = []
-    for i in range(1, NB_holes_total+1):
-        feature_list.append( Feature('part/hole_' + str(i).zfill(2) + '_link', 0.003) )
-    featuress = [Features(feature_list, 2, 0.005, 0)]
-    ur3_fov_gui = RobotFOVGuiCallback(robot, ur3_fov, featuress, modelConfig = configHPPtoFOV)
-    # Display Robot Field of view.
-    #vf.guiRequest.append( (ur3_fov.loadInGui, {'self':None}))
-    # Display visibility cones.
-    vf.addCallback(ur3_fov_gui)
-    isClogged = lambda x : ur3_fov.clogged(x, robot, featuress)
-    pg.setIsClogged(isClogged)
-    visibleFeatures = lambda x : ur3_fov.visible(x, robot, featuress)
-
-### DEMO
-
-def getDoableHoles():
-    doableHoles = []
-    non_doableHoles = []
-    pg.testGraph()
-    for i in range(NB_holes_total):
-        if pg.isHoleDoable(i):
-            doableHoles.append(i)
-        else:
-            non_doableHoles.append(i)
-    print("Doable holes : ", doableHoles)
-    print("Non doable holes : ", non_doableHoles)
-    return doableHoles, non_doableHoles
-
-def doDemo():
-    NB_holes_to_do = 7
-    demo_holes = range(NB_holes_to_do)
-    pids, qend = pg.planPointingPaths(demo_holes)
-
-holist = [7,8,9,42,43,13]
-v(q_init)
-
-
-### SUITE
+### CALIBRATION
 from calibration import Calibration, checkData
 
 calibration = Calibration(ps, graph, factory)
@@ -331,4 +259,5 @@ calibration.robot_name = "ur3"
 calibration.camera_frame = 'camera_color_optical_frame'
 calibration.chessboardCenter = (0, 0, 0)
 calibration.addStateToConstraintGraph()
-#calibration.generateConfigurationsAndPaths(q_init, nbConfigs = 10)
+#calibration.generateConfigurationsAndPaths(q_init, nbConfigs = 50)
+#calibration.generateConfigurationsAndPaths(q_init, filename="../data/calib-configs.csv")

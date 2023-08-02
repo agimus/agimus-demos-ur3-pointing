@@ -42,6 +42,18 @@ kinematics:
     pitch: 3.141592653589793
     yaw: 3.141547691499492
   hash:
+ 
+#5th calibration
+#Mean residual rMo(21) - rotation (deg) = 0.759084
+#Mean residual rMo(21) - translation (m) = 0.00266044
+#Mean residual rMo(21) - global = 0.00955514
+camera:
+  x: -0.00050396
+  y: 0.11817639
+  z: -0.01803829
+  roll: -0.01500569
+  pitch: -1.07897808
+  yaw: -1.54475542 
   
 #Initial UR10 data
 # Pose of ref_camera_link in ur10e_d435_mount_link
@@ -102,14 +114,9 @@ kinematics:
 # pitch: -0.92807268
 #  yaw: -1.56409403
 
-#5th calibration
-#Mean residual rMo(21) - rotation (deg) = 0.759084
-#Mean residual rMo(21) - translation (m) = 0.00266044
-#Mean residual rMo(21) - global = 0.00955514
-camera:
-  x: -0.00050396
-  y: 0.11817639
-  z: -0.01803829
-  roll: -0.01500569
-  pitch: -1.07897808
-  yaw: -1.54475542
+
+#6th calibration - 27/07/23
+#Mean residual rMo(6) - rotation (deg) = 0.683572
+#Mean residual rMo(6) - translation (m) = 0.0237621
+#Mean residual rMo(6) - global = 0.0188013
+
