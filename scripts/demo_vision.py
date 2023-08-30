@@ -255,8 +255,12 @@ ps.setTimeOutPathPlanning(15)
 ps.setInitialConfig(q_init)
 v(q_init)
 
-def executeholes(l, q_init=q_init):
-    for i in l:
+#Execute a pointing task for a list of handle/holes
+def executeSeveralHoles(listOfHole, q_init=q_init):
+    for i in listOfHole:
+        #Update with the current config
         q_init = ri.getCurrentConfig(q_init)
+        #Generate a path 
         id, q = pg.planPointingPathForHole(i, q_init, 50)
+        #Execute the path without visualisation
         pg.demo_execute(id, steps=False, visualize=False)
