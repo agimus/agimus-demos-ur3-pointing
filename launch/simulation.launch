@@ -55,7 +55,7 @@
     <!-- <rosparam command="load" file="$(find ur_gazebo)/controller/arm_controller_ur3.yaml"/> -->
   <!-- <include file="$(find ur_gazebo)/launch/controller_utils.launch"/> -->
   
-  <!-- Kapla -->
+  <!-- Part -->
   <group ns="part">
     <node name="spawn_part" pkg="gazebo_ros" type="spawn_model"
 	  args="-file $(find agimus_demos)/ur3/pointing/urdf/$(arg part).urdf -urdf
