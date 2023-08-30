@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://wiki.ros.org/xacro" name="ur3e" >
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="ur3" >
 
   <material name="white02">
     <color rgba="1 1 1 0.2"/>
@@ -9,13 +9,13 @@
   <xacro:arg name="gazebo" default="false"
              doc="whether robot is loaded in gazebo simulator"/>
   <xacro:arg name="joint_limit_params"
-             default="$(find ur_description)/config/ur3e/joint_limits.yaml"/>
+             default="$(find ur_description)/config/ur3/joint_limits.yaml"/>
   <xacro:arg name="kinematics_params"
              default="$(find agimus_demos)/ur3/pointing/config/calibrated-params.yaml"/>
   <xacro:arg name="physical_params"
-             default="$(find ur_description)/config/ur3e/physical_parameters.yaml"/>
+             default="$(find ur_description)/config/ur3/physical_parameters.yaml"/>
   <xacro:arg name="visual_params"
-             default="$(find ur_description)/config/ur3e/visual_parameters.yaml"/>
+             default="$(find ur_description)/config/ur3/visual_parameters.yaml"/>
   <!-- legal values:
        - hardware_interface/PositionJointInterface
        - hardware_interface/VelocityJointInterface
@@ -224,7 +224,7 @@
      </visual> -->
    </link>
 
-   <link name="ur3e_d435_mount_link">
+   <link name="ur3_d435_mount_link">
      <inertial>
        <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
        <mass value="0.1"/>
@@ -235,7 +235,7 @@
      <visual>
        <origin xyz="0 0 0" rpy="0 0 0" />
        <geometry>
-         <mesh filename="package://agimus_demos/ur3/pointing/meshes/ur3e_d435_mount.stl"/>
+         <mesh filename="package://agimus_demos/ur3/pointing/meshes/ur3_d435_mount.stl"/>
        </geometry>
        <material name="Red">
          <color rgba="0.9 0.1 0.1 1.0"/>
@@ -244,18 +244,18 @@
      <collision>
        <origin xyz="0 0 0" rpy="0 0 0" />
        <geometry>
-         <mesh filename="package://agimus_demos/ur3/pointing/meshes/ur3e_d435_mount.stl"/>
+         <mesh filename="package://agimus_demos/ur3/pointing/meshes/ur3_d435_mount.stl"/>
        </geometry>
      </collision>
    </link>
 
-   <joint name="ur3e_d435_mount_joint" type="fixed">
+   <joint name="ur3_d435_mount_joint" type="fixed">
      <parent link="wrist_3_link"/>
-     <child link="ur3e_d435_mount_link" />
+     <child link="ur3_d435_mount_link" />
      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 3.14159265359" />
    </joint>
 
-   <link name="ur3e_tool_link">
+   <link name="ur3_tool_link">
      <inertial>
        <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
        <mass value="0.1"/>
@@ -267,7 +267,7 @@
      <visual>
        <origin xyz="0 0 0" rpy="0 0 0" />
        <geometry>
-         <mesh filename="package://agimus_demos/ur3/pointing/meshes/ur3e_tip.stl"/>
+         <mesh filename="package://agimus_demos/ur3/pointing/meshes/ur3_tip.stl"/>
        </geometry>
        <material name="Red">
          <color rgba="0.9 0.1 0.1 1.0"/>
@@ -276,7 +276,7 @@
      <collision>
        <origin xyz="0 0 0" rpy="0 0 0" />
        <geometry>
-         <mesh filename="package://agimus_demos/ur3/pointing/meshes/ur3e_tip.stl"/>
+         <mesh filename="package://agimus_demos/ur3/pointing/meshes/ur3_tip.stl"/>
        </geometry>
      </collision>
      <!-- wooden spike -->
@@ -297,18 +297,18 @@
      </collision>
    </link>
 
-   <joint name="ur3e_tool_joint" type="fixed">
-     <parent link="ur3e_d435_mount_link"/>
-     <child link="ur3e_tool_link" />
+   <joint name="ur3_tool_joint" type="fixed">
+     <parent link="ur3_d435_mount_link"/>
+     <child link="ur3_tool_link" />
      <origin xyz="$(arg tip_offset_x) $(arg tip_offset_y) 0.0" rpy="0.0 0.0 0.0" />
    </joint>
 
-   <link name="ur3e_tooltip_link">
+   <link name="ur3_tooltip_link">
    </link>
 
-  <joint name="ur3e_tooltip_joint" type="fixed">
-     <parent link="ur3e_tool_link" />
-     <child link = "ur3e_tooltip_link" />
+  <joint name="ur3_tooltip_joint" type="fixed">
+     <parent link="ur3_tool_link" />
+     <child link = "ur3_tooltip_link" />
      <origin xyz="0.0 0.0 ${0.25 + $(arg tip_offset_z)}" rpy="0.0 0.0 0.0" />
   </joint>
 
@@ -316,7 +316,7 @@
    </link>
 
     <joint name="ref_camera_joint" type="fixed">
-     <parent link="ur3e_d435_mount_link" />
+     <parent link="ur3_d435_mount_link" />
      <child link = "ref_camera_link" />
      <origin xyz="${camera_pose['camera']['x']}
                   ${camera_pose['camera']['y']}

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://wiki.ros.org/xacro" name="ur3e" >
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="ur3" >
 
   <material name="white02">
     <color rgba="1 1 1 0.2"/>
@@ -9,18 +9,18 @@
   <xacro:arg name="gazebo" default="false"
              doc="whether robot is loaded in gazebo simulator"/>
   <xacro:arg name="joint_limit_params"
-             default="$(find ur_description)/config/ur3e/joint_limits.yaml"/>
+             default="$(find ur_description)/config/ur3/joint_limits.yaml"/>
   <xacro:arg name="kinematics_params"
              default="$(find agimus_demos)/ur3/pointing/config/calibrated-params.yaml"/>
   <xacro:arg name="physical_params"
-             default="$(find ur_description)/config/ur3e/physical_parameters.yaml"/>
+             default="$(find ur_description)/config/ur3/physical_parameters.yaml"/>
   <xacro:arg name="visual_params"
-             default="$(find ur_description)/config/ur3e/visual_parameters.yaml"/>
+             default="$(find ur_description)/config/ur3/visual_parameters.yaml"/>
   <!-- legal values:
        - hardware_interface/PositionJointInterface
        - hardware_interface/VelocityJointInterface
        - hardware_interface/EffortJointInterface
--->
+  -->
   <xacro:arg name="transmission_hw_interface"
              default="hardware_interface/PositionJointInterface"/>
   <xacro:arg name="safety_limits" default="false"/>
@@ -55,61 +55,46 @@
   <xacro:property name="camera_pose_file"
                   value="$(find agimus_demos)/ur3/pointing/config/calibrated-params.yaml" />
   <xacro:property name="camera_pose" value="${load_yaml(camera_pose_file)}"/>
-  
+
    <link name="world" />
 
     <link name="support_link">
-      <inertial>
-        <mass value="200"/>
-	<origin xyz="0 0 0.44"/>
-        <inertia ixx="50"  ixy="0"  ixz="0" iyy="50" iyz="0" izz="50" />
-      </inertial>
-      
-      <!-- table -->
-      <visual>
-	<origin xyz="0.0 -0.305 0.5"/>
-        <geometry>
-	        <box size="0.80 1 1"/>
-        </geometry>
-      </visual>
-      <collision>
-        <origin xyz="0.0 -0.305 0.5"/>
-        <geometry>
-	        <box size="0.80 1 1"/>
-        </geometry>
-      </collision>
-      
-      <!-- support -->
-     <visual>
-       <origin xyz="0 0 1.01"/>
-       <geometry>
-	        <box size="0.16 0.16 0.02"/>
-       </geometry>
-     </visual>
-     <collision>
-       <origin xyz="0 0 1.01"/>
-       <geometry>
-	        <box size="0.16 0.16 0.02"/>
-       </geometry>
-     </collision>     
+        <inertial>
+            <mass value="200"/>
+        	<origin xyz="0 0 0.44"/>
+            <inertia ixx="50"  ixy="0"  ixz="0" iyy="50" iyz="0" izz="50" />
+        </inertial>
+          
+        <!-- table -->
+            <visual>
+        	<origin xyz="0.0 -0.305 0.5"/>
+                <geometry>
+        	        <box size="0.80 1 1"/>
+                </geometry>
+              </visual>
+              <collision>
+                <origin xyz="0.0 -0.305 0.5"/>
+                <geometry>
+        	        <box size="0.80 1 1"/>
+                </geometry>
+              </collision>
+          
+         <!-- support -->
+             <visual>
+               <origin xyz="0 0 1.01"/>
+               <geometry>
+        	        <box size="0.16 0.16 0.02"/>
+               </geometry>
+             </visual>
+             <collision>
+               <origin xyz="0 0 1.01"/>
+               <geometry>
+        	        <box size="0.16 0.16 0.02"/>
+               </geometry>
+             </collision>     
     </link>
 
-     <link name="walls">
-     <!-- front wall -->
-     <!-- visual -->
-	<!-- origin xyz="0.385 -0.305 0.37"/ -->
-        <!-- geometry -->
-	  <!-- box size="0.03 1 0.74"/ -->
-        <!-- /geometry -->
-	<!-- material name="white02"/ -->
-     <!-- /visual -->
-      <collision>
-       <origin xyz="0.385 -0.305 0.37"/>
-       <geometry>
-	 <box size="0.03 1 0.74"/>
-       </geometry>
-      </collision>
-      
+     <link name="walls">        
       <!-- behind wall -->
      <visual>
 	<origin xyz="-0.385 -0.305 0.37"/>
@@ -171,11 +156,10 @@
      </collision>
     </link> 
 
-
 <joint name="walls_joint" type="fixed">
      <parent link="support_link" />
      <child link = "walls" />
-      <origin xyz="0.0 0.0 1" rpy="0.0 0.0 0" />
+     <origin xyz="0.0 0.0 1" rpy="0.0 0.0 0" />
    </joint>
 
    <joint name="support_joint" type="fixed">
@@ -184,36 +168,27 @@
      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
    </joint>
   
-   
    <joint name="robot_joint" type="fixed">
      <parent link="support_link" />
      <child link = "base_link" />
       <origin xyz="0.0 0.0 1" rpy="0.0 0.0 -1.5707963" />
-   </joint>
-   
-    <!-- End Effector -->
-    <joint name="ee_fixed_joint" type="fixed">
-        <parent link="wrist_3_link"/>
-        <child link="ee_link"/>
-        <origin rpy="0.0 0.0 1.57079632679" xyz="0.0 0.0823 0.0"/>
-    </joint>
-    <link name="ee_link">
-    <collision>
-      <geometry>
-        <box size="0.01 0.01 0.01"/>
-      </geometry>
-      <origin rpy="0 0 0" xyz="-0.01 0 0"/>
-    </collision>
+   </joint> 
+       
+   <!-- Gripper -->
+    <link name="robotiq_85_gripper">
+     <visual>
+        <geometry>
+          <mesh filename="package://agimus_demos/ur3/pointing/meshes/gripper_2f85_opened.stl" scale = "0.001 0.001 0.001" />
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://agimus_demos/ur3/pointing/meshes/gripper_2f85_opened.stl" scale = "0.001 0.001 0.001" />
+        </geometry> 
+      </collision> >
     </link>
-    
-        
-  <!-- Robotiq Coupler -->
-  <!-- Gripper -->
-  <xacro:include filename="$(find agimus_demos)/ur3/pointing/urdf/robotiq_gripper/robotiq_85_gripper.urdf.xacro" />
-  
-  <!--  + Height added by the coupler: 8mm -->
-  <!--  + Reference frame: at the middle (4mm) -->
-  <link name="robotiq_coupler">
+
+    <link name="robotiq_coupler">
     <visual>
       <geometry>
         <mesh filename="package://agimus_demos/ur3/pointing/meshes/robotiq_85_coupler.stl" />
@@ -232,30 +207,65 @@
                iyy="7.85088161e-05" iyz="5.41105193e-07" izz="1.41819717e-04"/>
     </inertial>
   </link>
-  
+    
   <joint name="robotiq_coupler_joint" type="fixed">
-    <origin xyz="0 0 0.004" rpy="0 0 ${-pi/2.0}" />
-    <parent link="tool0"/>
+    <origin xyz="0 0 0.015" rpy="0 0 ${pi/2.0}" />
+    <parent link="ur3_d435_mount_link"/>
     <child link="robotiq_coupler"/>
   </joint>
-  
-  <gazebo reference="robotiq_coupler">
-    <mu1>0.9</mu1>
-    <mu2>0.9</mu2>
-    <material>Gazebo/FlatBlack</material>
-  </gazebo>
-
+    
   <!-- Attach the robotiq 85 gripper -->
-  <xacro:robotiq_85_gripper prefix="" parent="robotiq_coupler" >
-    <origin xyz="0 0 0.004" rpy="0 ${-pi/2} ${pi}"/>
-  </xacro:robotiq_85_gripper> 
+   <joint name="robotiq_85_gripper_joint" type="fixed">
+     <parent link="robotiq_coupler"/>
+     <child link="robotiq_85_gripper"/>
+    <origin xyz="-0.094 0 0" rpy="${pi/2} 0 ${pi/2}"/>
+  </joint> 
    
-   <!-- Camera -->
+    <!-- TCP frame -->
+    <joint name="tcp_joint" type="fixed">
+      <origin xyz="0 0 0.116" rpy="0 0 0"/>
+      <parent link="robotiq_85_gripper"/>
+      <child link="tcp"/>
+    </joint>
+    <link name="tcp"/>
+    
+    <!-- Camera -->
+    <link name="ur3_d435_mount_link">
+     <inertial>
+       <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+       <mass value="0.1"/>
+       <inertia ixx="0.001" ixy="0.0" ixz="0.0"
+         iyy="0.001" iyz="0.0"
+         izz="0.001" />
+     </inertial>
+     <visual>
+       <origin xyz="0 0 0" rpy="0 0 0" />
+       <geometry>
+         <mesh filename="package://agimus_demos/ur3/pointing/meshes/ur3_d435_mount.stl"/>
+       </geometry>
+       <material name="Red">
+         <color rgba="0.9 0.1 0.1 1.0"/>
+       </material>
+     </visual>
+     <collision>
+       <origin xyz="0 0 0" rpy="0 0 0" />
+       <geometry>
+         <mesh filename="package://agimus_demos/ur3/pointing/meshes/ur3_d435_mount.stl"/>
+       </geometry>
+     </collision>
+   </link>
+
+   <joint name="ur3_d435_mount_joint" type="fixed">
+     <parent link="wrist_3_link"/>
+     <child link="ur3_d435_mount_link" />
+     <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 3.14159265359" />
+   </joint>
+
    <link name="ref_camera_link">
    </link>
 
     <joint name="ref_camera_joint" type="fixed">
-     <parent link="wrist_3_link" />
+     <parent link="ur3_d435_mount_link" />
      <child link = "ref_camera_link" />
      <origin xyz="${camera_pose['camera']['x']}
                   ${camera_pose['camera']['y']}
@@ -269,6 +279,8 @@
 
    <xacro:sensor_d435 parent="ref_camera_link" name="camera" use_nominal_extrinsics="true">
      <!-- <origin xyz="0 0.115 0" rpy="0 -1.0472 -1.57079632679"/> -->
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+     <origin xyz="0 0 0" rpy="0 0 0"/>
    </xacro:sensor_d435>
+            
 </robot>
+

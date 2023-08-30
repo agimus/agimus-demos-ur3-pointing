@@ -1,0 +1,60 @@
+<launch>
+  <arg name="script_file"
+       doc="Full path to the script which initialize the supervisor"
+       default="$(find agimus_demos)/ur3/pointing/supervisor.py"/>
+  <!-- whether the demonstration is run in simulation or on the real robot -->
+  <arg name="simulation" default="false"/>
+  <!-- YAML file that describes the demonstration: robots, objects -->
+  <arg name="part" default="plaque-ur3"/>
+  <arg name="usb_port_gripper" default="/dev/ttyUSB0"/>
+  
+  <!-- start hardware communication with robotiq gripper -->
+  <group unless="$(arg simulation)">
+      <node name="robotiq2FGripper" pkg="robotiq_2f_gripper_control" type="Robotiq2FGripperRtuNode.py" args="$(arg usb_port_gripper)" respawn="true" output="screen" if="$(eval arg('part') == 'plaque-ur3')"/>
+  </group> 
+  
+  <include file="$(find agimus_demos)/launch/ur3_pointing_world_setup.launch">
+    <arg name="part" value="$(arg part)"/>
+  </include>
+  <!-- start ros controller running the SoT -->
+  <include file="$(find sot_universal_robot)/launch/controller.launch">
+    <arg name="simulation" value="$(arg simulation)"/>
+    <arg name="robot" value="ur"/>
+  </include>
+
+  <!--This starts the HPP interface in namespace agimus/hpp-->
+  <group ns="agimus/hpp">
+    <node name="hpp_node" pkg="agimus-hpp" type="hpp_node.py"
+      args="hpp-manipulation-server" respawn="true"
+      output="screen" />
+  </group>
+
+  <!--This starts sot supervisor in namespace agimus/sot-->
+  <group if="$(eval arg('part') == 'plaque-ur3')">
+    <include file="$(find agimus-sot)/launch/supervisor.launch">
+        <arg name="script_file" value="$(find agimus_demos)/ur3/pointing/supervisor_pickandplace.py"/>
+        <arg name="robot_prefix" value="ur3/"/>
+        <arg name="simulate_torque_feedback" value="false"/>
+        <arg name="required" value="false"/>
+    </include>
+  </group>
+  <group unless="$(eval arg('part') == 'plaque-ur3')">
+    <include file="$(find agimus-sot)/launch/supervisor.launch">
+        <arg name="script_file" value="$(arg script_file)"/>
+        <arg name="robot_prefix" value="ur3/"/>
+        <arg name="simulate_torque_feedback" value="false"/>
+        <arg name="required" value="false"/>
+    </include>
+  </group>
+ 
+  <rosparam command="load"
+	    file="$(find agimus_demos)/ur3/pointing/demo-$(arg part).yaml"/>
+  <include file="$(find agimus)/launch/path_execution.launch">
+    <arg name="gui" value="false"/>
+  </include>
+    
+  <group unless="$(arg simulation)">  
+  <node name="gripper_control" pkg="agimus_demos" type="gripper_control.py" respawn="true" if="$(eval arg('part') == 'plaque-ur3')"/>
+  </group> 
+  
+</launch>

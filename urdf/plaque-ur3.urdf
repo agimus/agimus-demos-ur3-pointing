@@ -1,0 +1,949 @@
+<robot name="plaque-tubes">
+
+  <material name="black">
+    <color rgba="0 0 0 1.0"/>
+  </material>
+
+  <material name="white">
+    <color rgba="1 1 1 1.0"/>
+  </material>
+
+  <link name="base_link"/>
+  
+  <!-- Plaque -->
+  <link name="plaque_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://agimus_demos/ur3/pointing/meshes/plaque.stl" scale = "0.001 0.001 0.001"/>
+      </geometry>
+        <material name="white">
+          <color rgba="1 1 1 1"/>
+        </material>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://agimus_demos/ur3/pointing/meshes/plaque.stl" scale = "0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="2.2"/>
+       <origin xyz="0.129 -0.1535 -0.0025" rpy="0 0 0" />
+      <inertia ixx="0.1"  ixy="0"  ixz="0" iyy="0.1" iyz="0" izz="0.1" />
+    </inertial>
+  </link>
+
+  <joint name="plaque_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="plaque_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+    
+   <link name="hole_ref_link">
+    <visual>
+        <geometry>
+            <cylinder radius="0.002" length="0.001" />
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+    </visual>
+  </link>
+  <joint name="to_hole_ref" type="fixed">
+    <parent link="plaque_link" />
+    <child link="hole_ref_link" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+
+<!-- Holes -->
+<!-- 1st line -->
+
+  <link name="handle_00_link" />
+
+  <joint name="to_handle_00" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_00_link" />
+    <origin xyz="0.027 -0.071 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_01_link" />
+
+  <joint name="to_handle_01" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_01_link" />
+    <origin xyz="0.046 -0.071 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_02_link" />
+
+  <joint name="to_handle_02" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_02_link" />
+    <origin xyz="0.0645 -0.071 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_03_link" />
+
+  <joint name="to_handle_03" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_03_link" />
+    <origin xyz="0.083 -0.071 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_04_link" />
+
+  <joint name="to_handle_04" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_04_link" />
+    <origin xyz="0.1015 -0.071 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_05_link" />
+
+  <joint name="to_handle_05" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_05_link" />
+    <origin xyz="0.12 -0.071 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_06_link" />
+
+  <joint name="to_handle_06" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_06_link" />
+    <origin xyz="0.1385 -0.071 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_07_link" />
+
+  <joint name="to_handle_07" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_07_link" />
+    <origin xyz="0.157 -0.071 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_08_link" />
+
+  <joint name="to_handle_08" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_08_link" />
+    <origin xyz="0.1755 -0.071 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_09_link" />
+
+  <joint name="to_handle_09" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_09_link" />
+    <origin xyz="0.194 -0.071 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_10_link" />
+
+  <joint name="to_handle_10" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_10_link" />
+    <origin xyz="0.2125 -0.071 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_11_link" />
+
+  <joint name="to_handle_11" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_11_link" />
+    <origin xyz="0.231 -0.071 0" rpy="0 0 0" />
+  </joint>
+
+<!-- 2nd line -->
+
+  <link name="handle_12_link" />
+
+  <joint name="to_handle_12" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_12_link" />
+    <origin xyz="0.027 -0.093 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_13_link" />
+
+  <joint name="to_handle_13" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_13_link" />
+    <origin xyz="0.046 -0.093 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_14_link" />
+
+  <joint name="to_handle_14" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_14_link" />
+    <origin xyz="0.0645 -0.093 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_15_link" />
+
+  <joint name="to_handle_15" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_15_link" />
+    <origin xyz="0.083 -0.093 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_16_link" />
+
+  <joint name="to_handle_16" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_16_link" />
+    <origin xyz="0.1015 -0.093 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_17_link" />
+
+  <joint name="to_handle_17" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_17_link" />
+    <origin xyz="0.12 -0.093 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_18_link" />
+
+  <joint name="to_handle_18" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_18_link" />
+    <origin xyz="0.1385 -0.093 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_19_link" />
+
+  <joint name="to_handle_19" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_19_link" />
+    <origin xyz="0.157 -0.093 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_20_link" />
+
+  <joint name="to_handle_20" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_20_link" />
+    <origin xyz="0.1755 -0.093 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_21_link" />
+
+  <joint name="to_handle_21" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_21_link" />
+    <origin xyz="0.194 -0.093 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_22_link" />
+
+  <joint name="to_handle_22" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_22_link" />
+    <origin xyz="0.2125 -0.093 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_23_link" />
+
+  <joint name="to_handle_23" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_23_link" />
+    <origin xyz="0.231 -0.093 0" rpy="0 0 0" />
+  </joint>
+
+<!-- 3rd line -->
+
+  <link name="handle_24_link" />
+
+  <joint name="to_handle_24" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_24_link" />
+    <origin xyz="0.027 -0.115 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_25_link" />
+
+  <joint name="to_handle_25" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_25_link" />
+    <origin xyz="0.046 -0.115 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_26_link" />
+
+  <joint name="to_handle_26" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_26_link" />
+    <origin xyz="0.0645 -0.115 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_27_link" />
+
+  <joint name="to_handle_27" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_27_link" />
+    <origin xyz="0.083 -0.115 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_28_link" />
+
+  <joint name="to_handle_28" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_28_link" />
+    <origin xyz="0.1385 -0.115 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_29_link" />
+
+  <joint name="to_handle_29" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_29_link" />
+    <origin xyz="0.157 -0.115 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_30_link" />
+
+  <joint name="to_handle_30" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_30_link" />
+    <origin xyz="0.1755 -0.115 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_31_link" />
+
+  <joint name="to_handle_31" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_31_link" />
+    <origin xyz="0.194 -0.115 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_32_link" />
+
+  <joint name="to_handle_32" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_32_link" />
+    <origin xyz="0.2125 -0.115 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_33_link" />
+
+  <joint name="to_handle_33" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_33_link" />
+    <origin xyz="0.231 -0.115 0" rpy="0 0 0" />
+  </joint>
+
+<!-- 4th line -->
+
+  <link name="handle_34_link" />
+
+  <joint name="to_handle_34" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_34_link" />
+    <origin xyz="0.027 -0.192 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_35_link" />
+
+  <joint name="to_handle_35" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_35_link" />
+    <origin xyz="0.046 -0.192 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_36_link" />
+
+  <joint name="to_handle_36" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_36_link" />
+    <origin xyz="0.0645 -0.192 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_37_link" />
+
+  <joint name="to_handle_37" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_37_link" />
+    <origin xyz="0.083 -0.192 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_38_link" />
+
+  <joint name="to_handle_38" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_38_link" />
+    <origin xyz="0.1015 -0.192 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_39_link" />
+
+  <joint name="to_handle_39" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_39_link" />
+    <origin xyz="0.12 -0.192 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_40_link" />
+
+  <joint name="to_handle_40" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_40_link" />
+    <origin xyz="0.1755 -0.192 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_41_link" />
+
+  <joint name="to_handle_41" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_41_link" />
+    <origin xyz="0.194 -0.192 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_42_link" />
+
+  <joint name="to_handle_42" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_42_link" />
+    <origin xyz="0.2125 -0.192 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_43_link" />
+
+  <joint name="to_handle_43" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_43_link" />
+    <origin xyz="0.231 -0.192 0" rpy="0 0 0" />
+  </joint>
+
+<!-- 5th line -->
+
+  <link name="handle_44_link" />
+
+  <joint name="to_handle_44" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_44_link" />
+    <origin xyz="0.027 -0.214 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_45_link" />
+
+  <joint name="to_handle_45" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_45_link" />
+    <origin xyz="0.046 -0.214 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_46_link" />
+
+  <joint name="to_handle_46" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_46_link" />
+    <origin xyz="0.0645 -0.214 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_47_link" />
+
+  <joint name="to_handle_47" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_47_link" />
+    <origin xyz="0.083 -0.214 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_48_link" />
+
+  <joint name="to_handle_48" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_48_link" />
+    <origin xyz="0.1015 -0.214 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_49_link" />
+
+  <joint name="to_handle_49" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_49_link" />
+    <origin xyz="0.12 -0.214 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_50_link" />
+
+  <joint name="to_handle_50" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_50_link" />
+    <origin xyz="0.1385 -0.214 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_51_link" />
+
+  <joint name="to_handle_51" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_51_link" />
+    <origin xyz="0.157 -0.214 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_52_link" />
+
+  <joint name="to_handle_52" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_52_link" />
+    <origin xyz="0.1755 -0.214 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_53_link" />
+
+  <joint name="to_handle_53" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_53_link" />
+    <origin xyz="0.194 -0.214 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_54_link" />
+
+  <joint name="to_handle_54" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_54_link" />
+    <origin xyz="0.2125 -0.214 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_55_link" />
+
+  <joint name="to_handle_55" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_55_link" />
+    <origin xyz="0.231 -0.214 0" rpy="0 0 0" />
+  </joint>
+
+<!-- 6th line -->
+
+  <link name="handle_56_link" />
+
+  <joint name="to_handle_56" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_56_link" />
+    <origin xyz="0.027 -0.236 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_57_link" />
+
+  <joint name="to_handle_57" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_57_link" />
+    <origin xyz="0.046 -0.236 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_58_link" />
+
+  <joint name="to_handle_58" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_58_link" />
+    <origin xyz="0.0645 -0.236 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_59_link" />
+
+  <joint name="to_handle_59" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_59_link" />
+    <origin xyz="0.083 -0.236 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_60_link" />
+
+  <joint name="to_handle_60" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_60_link" />
+    <origin xyz="0.1015 -0.236 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_61_link" />
+
+  <joint name="to_handle_61" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_61_link" />
+    <origin xyz="0.12 -0.236 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_62_link" />
+
+  <joint name="to_handle_62" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_62_link" />
+    <origin xyz="0.1385 -0.236 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_63_link" />
+
+  <joint name="to_handle_63" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_63_link" />
+    <origin xyz="0.157 -0.236 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_64_link" />
+
+  <joint name="to_handle_64" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_64_link" />
+    <origin xyz="0.1755 -0.236 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_65_link" />
+
+  <joint name="to_handle_65" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_65_link" />
+    <origin xyz="0.194 -0.236 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_66_link" />
+
+  <joint name="to_handle_66" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_66_link" />
+    <origin xyz="0.2125 -0.236 0" rpy="0 0 0" />
+  </joint>
+
+
+  <link name="handle_67_link" />
+
+  <joint name="to_handle_67" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_67_link" />
+    <origin xyz="0.231 -0.236 0" rpy="0 0 0" />
+  </joint>
+
+<!-- Screws -->
+<!-- 1st line -->
+
+  <link name="handle_68_link" />
+
+  <joint name="to_handle_68" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_68_link" />
+    <origin xyz="0.029 -0.0265 0" rpy="0 0 0" />
+  </joint> 
+
+
+  <link name="handle_69_link" />
+
+  <joint name="to_handle_69" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_69_link" />
+    <origin xyz="0.05 -0.0265 0" rpy="0 0 0" />
+  </joint> 
+
+
+  <link name="handle_70_link" />
+
+  <joint name="to_handle_70" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_70_link" />
+    <origin xyz="0.079 -0.0265 0" rpy="0 0 0" />
+  </joint> 
+
+
+  <link name="handle_71_link" />
+
+  <joint name="to_handle_71" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_71_link" />
+    <origin xyz="0.104 -0.0265 0" rpy="0 0 0" />
+  </joint> 
+
+
+  <link name="handle_72_link" />
+
+  <joint name="to_handle_72" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_72_link" />
+    <origin xyz="0.139 -0.0265 0" rpy="0 0 0" />
+  </joint> 
+
+
+  <link name="handle_73_link" />
+
+  <joint name="to_handle_73" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_73_link" />
+    <origin xyz="0.154 -0.0265 0" rpy="0 0 0" />
+  </joint> 
+
+<!-- 2nd line -->
+
+  <link name="handle_74_link" />
+
+  <joint name="to_handle_74" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_74_link" />
+    <origin xyz="0.029 -0.049 0" rpy="0 0 0" />
+  </joint> 
+
+
+  <link name="handle_75_link" />
+
+  <joint name="to_handle_75" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_75_link" />
+    <origin xyz="0.05 -0.049 0" rpy="0 0 0" />
+  </joint> 
+
+
+  <link name="handle_76_link" />
+
+  <joint name="to_handle_76" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_76_link" />
+    <origin xyz="0.079 -0.049 0" rpy="0 0 0" />
+  </joint> 
+
+
+  <link name="handle_77_link" />
+
+  <joint name="to_handle_77" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_77_link" />
+    <origin xyz="0.104 -0.049 0" rpy="0 0 0" />
+  </joint> 
+
+
+  <link name="handle_78_link" />
+
+  <joint name="to_handle_78" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_78_link" />
+    <origin xyz="0.139 -0.049 0" rpy="0 0 0" />
+  </joint> 
+
+
+  <link name="handle_79_link" />
+
+  <joint name="to_handle_79" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_79_link" />
+    <origin xyz="0.154 -0.049 0" rpy="0 0 0" />
+  </joint> 
+
+<!-- 3rd line -->
+
+  <link name="handle_80_link" />
+
+  <joint name="to_handle_80" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_80_link" />
+    <origin xyz="0.1035 -0.258 0" rpy="0 0 0" />
+  </joint> 
+
+
+  <link name="handle_81_link" />
+
+  <joint name="to_handle_81" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_81_link" />
+    <origin xyz="0.129 -0.258 0" rpy="0 0 0" />
+  </joint> 
+
+
+  <link name="handle_82_link" />
+
+  <joint name="to_handle_82" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_82_link" />
+    <origin xyz="0.154 -0.258 0" rpy="0 0 0" />
+  </joint> 
+
+
+  <link name="handle_83_link" />
+
+  <joint name="to_handle_83" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_83_link" />
+    <origin xyz="0.179 -0.257 0" rpy="0 0 0" />
+  </joint> 
+
+
+  <link name="handle_84_link" />
+
+  <joint name="to_handle_84" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_84_link" />
+    <origin xyz="0.204 -0.257 0" rpy="0 0 0" />
+  </joint> 
+
+
+  <link name="handle_85_link" />
+
+  <joint name="to_handle_85" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_85_link" />
+    <origin xyz="0.229 -0.257 0" rpy="0 0 0" />
+  </joint> 
+
+<!-- 4th line -->
+
+  <link name="handle_86_link" />
+
+  <joint name="to_handle_86" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_86_link" />
+    <origin xyz="0.1035 -0.285 0" rpy="0 0 0" />
+  </joint> 
+
+
+  <link name="handle_87_link" />
+
+  <joint name="to_handle_87" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_87_link" />
+    <origin xyz="0.129 -0.285 0" rpy="0 0 0" />
+  </joint> 
+
+
+  <link name="handle_88_link" />
+
+  <joint name="to_handle_88" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_88_link" />
+    <origin xyz="0.154 -0.284 0" rpy="0 0 0" />
+  </joint> 
+
+
+  <link name="handle_89_link" />
+
+  <joint name="to_handle_89" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_89_link" />
+    <origin xyz="0.179 -0.279 0" rpy="0 0 0" />
+  </joint> 
+
+
+  <link name="handle_90_link" />
+
+  <joint name="to_handle_90" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_90_link" />
+    <origin xyz="0.204 -0.278 0" rpy="0 0 0" />
+  </joint> 
+
+
+  <link name="handle_91_link" />
+
+  <joint name="to_handle_91" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_91_link" />
+    <origin xyz="0.229 -0.278 0" rpy="0 0 0" />
+  </joint> 
+
+<!-- Nuts -->
+
+ <link name="handle_92_link">
+    <visual>
+        <geometry>
+            <cylinder radius="0.00135" length="0.007" />
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+    </visual>
+  </link>
+  <joint name="to_handle_92" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_92_link" />
+    <origin xyz="0.027 -0.1535 0" rpy="0 0 0" />
+  </joint> 
+
+
+ <link name="handle_93_link">
+    <visual>
+        <geometry>
+            <cylinder radius="0.00135" length="0.007" />
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+    </visual>
+  </link>
+  <joint name="to_handle_93" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_93_link" />
+    <origin xyz="0.083 -0.1535 0" rpy="0 0 0" />
+  </joint> 
+
+
+ <link name="handle_94_link">
+    <visual>
+        <geometry>
+            <cylinder radius="0.00135" length="0.007" />
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+    </visual>
+  </link>
+  <joint name="to_handle_94" type="fixed">
+    <parent link="plaque_link" />
+    <child link="handle_94_link" />
+    <origin xyz="0.1755 -0.1535 0" rpy="0 0 0" />
+  </joint> 
+
+</robot>

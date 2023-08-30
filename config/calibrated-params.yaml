@@ -42,12 +42,81 @@ kinematics:
     pitch: 3.141592653589793
     yaw: 3.141547691499492
   hash:
-
-# Pose of ref_camera_link in ur10e_d435_mount_link
+ 
+#5th calibration
+#Mean residual rMo(21) - rotation (deg) = 0.759084
+#Mean residual rMo(21) - translation (m) = 0.00266044
+#Mean residual rMo(21) - global = 0.00955514
 camera:
-  x: 0.00033351
-  y: 0.11805402
-  z: -0.01064025
-  roll: -0.00127120646
-  pitch: -1.00435876
-  yaw: -1.56137241
+  x: -0.00050396
+  y: 0.11817639
+  z: -0.01803829
+  roll: -0.01500569
+  pitch: -1.07897808
+  yaw: -1.54475542 
+  
+#Initial UR10 data
+# Pose of ref_camera_link in ur10e_d435_mount_link
+#camera:
+#  x: 0.00033351
+#  y: 0.11805402
+#  z: -0.01064025
+#  roll: -0.00127120646
+#  pitch: -1.00435876
+#  yaw: -1.56137241
+  
+# 1st calibration
+#Mean residual rMo(11) - rotation (deg) = 1.26934
+#Mean residual rMo(11) - translation (m) = 0.00400674
+#Mean residual rMo(11) - global = 0.0159194
+
+#camera:
+#  x: 0.00300477
+#  y:  0.12627253
+#  z: -0.02307305
+#  roll: 0.00817553
+#  pitch: -1.07047557
+#  yaw: -1.56309642
+
+#2nd calibration (Fail)
+#Mean residual rMo(18) - rotation (deg) = 0.812569
+#Mean residual rMo(18) - translation (m) = 0.00338689
+#Mean residual rMo(18) - global = 0.0103102
+#camera:
+#  x:  0.01074829
+#  y:  0.15305662
+#  z: -0.00025956
+#  roll: -1.0087989
+#  pitch: -1.04917172
+ # yaw: -1.79841384
+
+#3rd calibration
+#Mean residual rMo(16) - rotation (deg) = 0.836294
+#Mean residual rMo(16) - translation (m) = 0.00278934
+#Mean residual rMo(16) - global = 0.0105078
+#camera:
+#  x:  0.00229191
+#  y:  0.12761135
+#  z: -0.02471939
+#  roll: -0.00445908
+#  pitch: -1.14667902
+#  yaw: -1.54573088
+
+#4th calibration
+#Mean residual rMo(7) - rotation (deg) = 0.340461
+#Mean residual rMo(7) - translation (m) = 0.00256885
+#Mean residual rMo(7) - global = 0.00457757
+#camera:
+#  x: -0.0012832
+#  y: 0.11236018
+#  z: 0.0029342
+#  roll: -0.00481172
+# pitch: -0.92807268
+#  yaw: -1.56409403
+
+
+#6th calibration - 27/07/23
+#Mean residual rMo(6) - rotation (deg) = 0.683572
+#Mean residual rMo(6) - translation (m) = 0.0237621
+#Mean residual rMo(6) - global = 0.0188013
+

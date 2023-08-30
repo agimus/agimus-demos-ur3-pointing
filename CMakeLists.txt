@@ -27,64 +27,57 @@
 # Install launch files in launch directory
 INSTALL_DEMO_LAUNCH_FILES(ur3 pointing
   LAUNCHFILES
-  demo.launch
-  estimation.launch
-  estimation_realsense.launch
-  load_ur.launch
-  load_ur3e.launch
-  simulation.launch
-  ur3_upload.launch
-  world_setup.launch
+  launch/demo.launch
+  launch/estimation.launch
+  launch/estimation_realsense.launch
+  launch/load_ur.launch
+  launch/load_ur3.launch
+  launch/simulation.launch
+  launch/ur3_upload.launch
+  launch/world_setup.launch
   )
 
 INSTALL(FILES
   supervisor.py
-  demo-kapla.yaml
+  supervisor_pickandplace.py
+  yaml/demo-april-tag-plank.yaml
+  yaml/demo-plaque-ur3.yaml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing
   )
-
+  
+INSTALL(PROGRAMS
+    gripper_control.py
+    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing
+    )  
+  
 INSTALL(FILES
-  urdf/kapla.urdf
+  urdf/april-tag-plank.urdf
+  urdf/plaque-ur3.urdf
   urdf/robot.urdf.xacro
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/urdf
   )
-  
+   
 INSTALL(FILES
-  urdf/robotiq_gripper/robotiq_85_gripper.transmission.xacro
-  urdf/robotiq_gripper/robotiq_85_gripper.urdf.xacro
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/urdf/robotiq_gripper
-  )  
-  
-INSTALL(FILES
-  srdf/kapla.srdf
+  srdf/april-tag-plank.srdf
+  srdf/plaque-ur3.srdf
+  srdf/ur3_robot.srdf
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/srdf
   )
 
 INSTALL(FILES
+  srdf/ur3_robot.srdf
+  srdf/plaque-ur3.srdf
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/srdf
+  )  
+
+INSTALL(FILES
   meshes/IMC.stl
-  meshes/gripper_2F85_closed.stl
   meshes/gripper_2f85_opened.stl
   meshes/robotiq_85_coupler.stl
+  meshes/ur3_d435_mount.stl
+  meshes/plaque.stl
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/meshes
   )
-  
-INSTALL(FILES
-  meshes/collision/robotiq_85_base_link.stl
-  meshes/collision/robotiq_85_finger_link.stl
-  meshes/collision/robotiq_85_finger_tip_link.stl
-  meshes/collision/robotiq_85_inner_knuckle_link.stl
-  meshes/collision/robotiq_85_knuckle_link.stl
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/meshes/collision
-  )
  
-INSTALL(FILES
-  meshes/visual/robotiq_85_base_link.dae
-  meshes/visual/robotiq_85_finger_link.dae
-  meshes/visual/robotiq_85_finger_tip_link.dae
-  meshes/visual/robotiq_85_inner_knuckle_link.dae
-  meshes/visual/robotiq_85_knuckle_link.dae
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/meshes/visual
-  ) 
-
 INSTALL(DIRECTORY config DESTINATION
   ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing)
